@@ -1,11 +1,32 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
+import { usePathname } from "next/navigation";
 import Link from "next/link";
 import Image from "next/image";
 import styles from "./AdminDashboard.module.css";
 import { Poppins } from "next/font/google";
 import { ChevronLeft, ChevronRight, Home, Archive, Plus } from "lucide-react";
+
+function UserIpAdress() {
+  const [ip, setIp] = useState("");
+
+  useEffect(() => {
+    fetch("https://api.ipify.org?format=json")
+      .then((res) => res.json())
+      .then((data) => setIp(data.ip))
+      .catch((err) => console.error("IP bulunamadı", err));
+  }, []);
+  return <>{`${ip}`}</>;
+}
+
+function PageTitle() {
+  const pathname = usePathname();
+  const title = pathname.includes("/admin/archived")
+    ? "Archived Tickets"
+    : "Open Tickets";
+  return <>{title}</>;
+}
 
 const poppins = Poppins({
   weight: ["300", "400", "500", "600", "700"],
@@ -41,11 +62,14 @@ const sampleTickets = [
   },
 ];
 
+const currentDate = new Date().toLocaleDateString();
+function CurrentDate() {
+  return <p>{currentDate}</p>;
+}
+
 export default function AdminDashboard() {
   const [activePage, setActivePage] = useState("home");
   const [tickets, setTickets] = useState(sampleTickets);
-  const currentDate = "2025-04-11 08:14:45";
-  const currentUser = "Denizozaltay";
 
   const handleDelete = (id: number) => {
     setTickets(tickets.filter((ticket) => ticket.id !== id));
@@ -84,7 +108,7 @@ export default function AdminDashboard() {
             >
               <ChevronRight className={styles.menuIcon} size={18} />
               <Home className={styles.menuIcon} size={18} />
-              <Link href="/admin/homepage">Home</Link>
+              <Link href="/admin">Home</Link>
             </div>
 
             <div
@@ -104,14 +128,16 @@ export default function AdminDashboard() {
             >
               <ChevronRight className={styles.menuIcon} size={18} />
               <Plus className={styles.menuIcon} size={18} />
-              <Link href="/client/index">Create Ticket</Link>
+              <Link href="/">Create Ticket</Link>
             </div>
           </div>
         </div>
         <div className={styles.userInfo}>
           <p className={styles.userDetail}>
             <span className={styles.infoLabel}>User:</span>
-            <span className={styles.infoValue}>{currentUser}</span>
+            <span className={styles.infoValue}>
+              <UserIpAdress />
+            </span>
           </p>
           <p className={styles.userDetail}>
             <span className={styles.infoLabel}>Date:</span>
@@ -120,7 +146,9 @@ export default function AdminDashboard() {
         </div>
       </div>
       <div className={styles.rightColumn}>
-        <div className={styles.contentTitle}>Open Tickets</div>
+        <div className={styles.contentTitle}>
+          <PageTitle />
+        </div>
         <div className={styles.dataColumn}>
           <div className={styles.tableContainer}>
             <table className={styles.roundedTable}>
