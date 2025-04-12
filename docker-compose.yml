@@ -1,9 +1,9 @@
 services:
-  ticket-app:
+  web-dev:
     build:
       context: .
       dockerfile: Dockerfile.dev
-    container_name: ticket-app-dev
+    container_name: ticket-app
     ports:
       - "3000:3000"
     volumes:
@@ -11,12 +11,16 @@ services:
       - /app/node_modules
     environment:
       - NODE_ENV=development
+      - DATABASE_URL=postgresql://${POSTGRES_DB_USER}:${POSTGRES_DB_PASSWORD}@ticket-db-dev:5432/${POSTGRES_DB_NAME}
+    env_file:
+      - .env
     depends_on:
-      - postgres
+      - db-dev
+    restart: unless-stopped
 
-  postgres:
+  db-dev:
     image: postgres:17.4
-    container_name: postgres-db-dev
+    container_name: ticket-db-dev
     restart: always
     environment:
       POSTGRES_USER: ${POSTGRES_DB_USER}
@@ -26,7 +30,8 @@ services:
       - "${POSTGRES_DB_PORT}:5432"
     volumes:
       - pgdata:/var/lib/postgresql/data
+    env_file:
+      - .env
 
 volumes:
   pgdata:
-  node_modules:
