@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { PrismaClient } from "@prisma/client";
-import { Ticket } from "@/app/types/ticket";
+import { Ticket } from "@/src/types/ticket";
 
 const prisma = new PrismaClient();
 
