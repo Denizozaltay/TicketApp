@@ -1,9 +1,8 @@
-"use client"
+"use client";
 import { Archive, ChevronLeft, ChevronRight, Plus } from "lucide-react";
 import { Home } from "lucide-react";
 import { usePathname } from "next/navigation";
 import { Geist, Geist_Mono } from "next/font/google";
-
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -15,36 +14,50 @@ const geistMono = Geist_Mono({
   subsets: ["latin"],
 });
 
-
-
-
 function NavbarButtons() {
   const pathname = usePathname();
-  const IsActiveArchived = pathname.includes("/admin/archived")
-  const IsActiveOpen = pathname.includes("/admin/open")
+  const IsActiveArchived = pathname.includes("/admin/archived");
+  const IsActiveOpen = pathname.includes("/admin/open");
 
   const activeClass = "bg-[#006fff14] rounded-[12px] [&_*]:text-blue-500 ";
 
   return (
     <>
-      <div className={`opentickets ${IsActiveOpen ? `${activeClass}` : "hover:bg-gray-100 rounded-[12px] [&>a]:text-[#000000bf] [&>svg]:text-grey-500"}`}>
+      <div
+        className={`opentickets ${
+          IsActiveOpen
+            ? `${activeClass}`
+            : "hover:bg-gray-100 rounded-[12px] [&>a]:text-[#000000bf] [&>svg]:text-grey-500"
+        }`}
+      >
         <ChevronRight size={24} />
         <Home size={24} />
-        <a className="flex items-center font-medium" href="/admin/open">Open Tickets</a>
+        <a className="flex items-center font-medium" href="/admin/open">
+          Open Tickets
+        </a>
       </div>
-      <div className={`archivedtickets ${IsActiveArchived ? `${activeClass}` : "hover:bg-gray-100  rounded-[12px] [&>a]:text-[#000000bf] [&>svg]:text-grey-500"}`}>
+      <div
+        className={`archivedtickets ${
+          IsActiveArchived
+            ? `${activeClass}`
+            : "hover:bg-gray-100  rounded-[12px] [&>a]:text-[#000000bf] [&>svg]:text-grey-500"
+        }`}
+      >
         <ChevronRight size={24} />
         <Archive size={24} />
-        <a className="flex items-center font-medium" href="/admin/archived">Archived Tickets</a>
+        <a className="flex items-center font-medium" href="/admin/archived">
+          Archived Tickets
+        </a>
       </div>
       <div className="createticket hover:bg-gray-100 rounded-[12px]  [&>svg]:text-grey-500 [&>a]:text-[#000000bf]">
         <ChevronRight size={24} />
         <Plus size={24} />
-        <a className="flex items-center font-medium" href="/forms/ticketform">Create Ticket</a>
+        <a className="flex items-center font-medium" href="/forms/ticketform">
+          Create Ticket
+        </a>
       </div>
-
     </>
-  )
+  );
 }
 
 function ArchiveTicketTab() {
@@ -55,7 +68,7 @@ function ArchiveTicketTab() {
   return <></>;
 }
 
-export default function NavBar() {
+export default function Navbar() {
   return (
     <div className="header-column flex flex-col flex-[0_0_20%] bg-[#FDFDFD] shadow-lg  text-white gap-4 p-4 box-border h-full overflow-hidden">
       <div className="title flex flex-row items-center justify-between text-[16px] border-b-[3px] border-[#f6f6f6] m-0 pb-4">
@@ -80,14 +93,15 @@ export default function NavBar() {
             OVERVIEW
           </p>
         </div>
-        <div className="contents flex flex-col text-[1.2em] gap-[0.25em] mt-4 
+        <div
+          className="contents flex flex-col text-[1.2em] gap-[0.25em] mt-4 
           [&>div]:flex [&>div]:flex-1 [&>div]:no-underline [&>div]:py-5 [&>div]:px-0 [&>div]:box-content [&>div]:text-[1rem] [&>div]:gap-[0.5rem] [&>div]:transition-all [&>div]:duration-200 [&>div]:ease-in-out [&>div]:cursor-default
           [&>div>a]:no-underline [&>div>a]:text-[1rem] [&>div>a:hover]:text-[rgba(0,111,255,1)] [&>div>a]:transition-all [&>div>a]:duration-200 [&>div>a]:ease-in-out
-          [&>div>svg]:text-[rgba(0,0,0,0.1)] ">
+          [&>div>svg]:text-[rgba(0,0,0,0.1)] "
+        >
           <NavbarButtons />
         </div>
       </div>
     </div>
-
   );
 }
