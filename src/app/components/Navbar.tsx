@@ -18,7 +18,7 @@ const geistMono = Geist_Mono({
 
 
 
-function CurrentTab() {
+function NavbarButtons() {
   const pathname = usePathname();
   const IsActiveArchived = pathname.includes("/admin/archived")
   const IsActiveOpen = pathname.includes("/admin/open")
@@ -84,7 +84,7 @@ export default function NavBar() {
           [&>div]:flex [&>div]:flex-1 [&>div]:no-underline [&>div]:py-5 [&>div]:px-0 [&>div]:box-content [&>div]:text-[1rem] [&>div]:gap-[0.5rem] [&>div]:transition-all [&>div]:duration-200 [&>div]:ease-in-out [&>div]:cursor-default
           [&>div>a]:no-underline [&>div>a]:text-[1rem] [&>div>a:hover]:text-[rgba(0,111,255,1)] [&>div>a]:transition-all [&>div>a]:duration-200 [&>div>a]:ease-in-out
           [&>div>svg]:text-[rgba(0,0,0,0.1)] ">
-          <CurrentTab />
+          <NavbarButtons />
         </div>
       </div>
     </div>
