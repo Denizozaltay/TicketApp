@@ -1,11 +1,12 @@
-import AdminDashboard from "@/app/components/AdminDashboard";
+import AdminDashboard from "@/src/app/components/AdminDashboard";
+import NavBar from "@/src/app/components/NavBar";
 
-export default function Admin() {
+export default function ArchivedTickets() {
   return (
     <>
-      <main>
-        <AdminDashboard />
-      </main>
+      <div className="container flex h-screen w-screen box-border bg-[#f6f6f6] max-w-screen ">
+        <NavBar/>
+      </div>
     </>
   );
 }

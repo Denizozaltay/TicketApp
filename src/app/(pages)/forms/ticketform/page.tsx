@@ -1,7 +1,7 @@
 "use client";
 
 import React from "react";
-import styles from "./TicketForm.module.css";
+import styles from "@/src/app/components/TicketForm.module.css"
 import { Roboto } from "next/font/google";
 
 const roboto = Roboto({
