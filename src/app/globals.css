@@ -1,1 +1,172 @@
 @import "tailwindcss";
+
+
+
+.rounded-table th,
+.rounded-table td {
+    padding: 10px;
+    border: 1px solid #ccc;
+}
+
+.rounded-table th:first-child {
+    border-top-left-radius: 32px;
+    border-bottom-left-radius: 32px;
+}
+
+.rounded-table th:last-child {
+    border-top-right-radius: 32px;
+    border-bottom-right-radius: 32px;
+}
+.rounded-table {
+    display: flex;
+    flex-direction: column;
+}
+
+.rounded-table tr {
+    display: flex;
+}
+
+.rounded-table thead {
+    display: flex;
+}
+
+.rounded-table thead :nth-child(1) {
+    flex: 1;
+}
+
+.rounded-table thead :nth-child(2) {
+    flex: 1;
+}
+
+.rounded-table thead :nth-child(3) {
+    flex: 3;
+}
+
+.rounded-table thead :nth-child(4) {
+    flex: 1;
+}
+
+.rounded-table thead :nth-child(5) {
+    flex: 1;
+}
+
+.data-column th,
+tbody>td {
+    border: none;
+    background-color: rgba(0, 111, 255, 0.1);
+    font-size: 1.1rem;
+    font-weight: 600;
+    color: #000000bf;
+
+}
+
+#data-table-body {
+    flex-direction: row;
+    width: 100%;
+}
+
+tbody tr {
+    display: flex;
+    justify-content: center;
+}
+
+
+.rounded-table tbody tr {
+    font-size: 1rem;
+    font-weight: 250;
+}
+
+.rounded-table tbody tr>* {
+    border: none;
+    text-align: center;
+}
+
+
+/* this table stays in shape with the might of god himself */
+.rounded-table #data-table-body td:nth-child(1) {
+    flex: 1;
+}
+
+.rounded-table #data-table-body  td:nth-child(2) {
+    flex: 1;
+
+}
+
+.rounded-table #data-table-body  td:nth-child(3) {
+    flex: 3;
+
+}
+
+.rounded-table #data-table-body  td:nth-child(4) {
+    flex: 1;
+
+}
+
+.rounded-table #data-table-body td:nth-child(5) {
+    flex: 1;
+}
+
+
+.buttons-container {
+    display: flex;
+    justify-content: center;
+    gap: 5px;
+}
+
+.delete-btn,
+.archive-btn {
+    padding: 5px 12px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 14px;
+    transition: background-color 0.3s ease;
+}
+
+.delete-btn {
+    background-color: #ff6868;
+    border: 1px solid #ff6868;
+    color: white;
+}
+
+.delete-btn:hover {
+    background-color: white;
+    border: 1px solid #ff6868;
+    color: black;
+}
+
+.archive-btn {
+    background-color: #4ec2ff;
+    border: 1px solid #4ec2ff;
+    color: white;
+}
+
+.archive-btn:hover {
+    background-color: white;
+    border: 1px solid #4ec2ff;
+    color: black;
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+td:first-child {
+    text-align: center;
+}
+
+
+td {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+
+th:nth-child(5),
+td:nth-child(5) {
+    width: 175px;
+    text-align: center;
+}
+

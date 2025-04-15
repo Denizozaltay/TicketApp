@@ -1,3 +1,4 @@
+import DataTable from "./components/DataTable";
 import Navbar from "./components/Navbar";
 
 export default function Home() {
@@ -5,6 +6,7 @@ export default function Home() {
     <>
       <div className="container flex h-screen w-screen box-border bg-[#f6f6f6] max-w-screen ">
         <Navbar />
+        <DataTable />
       </div>
     </>
   );
