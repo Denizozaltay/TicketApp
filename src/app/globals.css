@@ -67,45 +67,32 @@ tbody>td {
 
 tbody tr {
     display: flex;
-    justify-content: center;
+    
 }
 
 
 .rounded-table tbody tr {
     font-size: 1rem;
-    font-weight: 250;
+    font-weight: 400;
+    justify-content: center;
+    align-items: center;  
 }
 
-.rounded-table tbody tr>* {
+.rounded-table tbody tr td {
+    flex: 1;
     border: none;
+    justify-content: center;
     text-align: center;
+    align-items: center;  
 }
 
 
-/* this table stays in shape with the might of god himself */
-.rounded-table #data-table-body td:nth-child(1) {
-    flex: 1;
-}
-
-.rounded-table #data-table-body  td:nth-child(2) {
-    flex: 1;
-
-}
-
-.rounded-table #data-table-body  td:nth-child(3) {
+/* bunu ellemeyin */
+.rounded-table tbody tr td:nth-child(3) {
     flex: 3;
 
 }
-
-.rounded-table #data-table-body  td:nth-child(4) {
-    flex: 1;
-
-}
-
-.rounded-table #data-table-body td:nth-child(5) {
-    flex: 1;
-}
-
+/* bunu ellemeyin */
 
 .buttons-container {
     display: flex;

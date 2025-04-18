@@ -1,5 +1,37 @@
 "use client"
+
 import { usePathname } from "next/navigation"
+
+
+const testDataArray: ITicketData[] = [
+  { id: 1, username: "alice", ticketcontent: "Hello world!", date: "24-05-2025" },
+  { id: 2, username: "bob", ticketcontent: "Ticket content 2", date: "25-05-2025" },
+  { id: 3, username: "charlie", ticketcontent: "Ticket content 3", date: "26-05-2025" }
+];
+interface ITicketData {
+  id: number;
+  username: string;
+  ticketcontent: string;
+  date: string;
+}
+
+
+const DataTableComponent = ({id, username, ticketcontent, date}: ITicketData) => {
+  return (
+     <tbody id="data-table-body" className="data-table-body">
+       <tr>
+        <td>{id}</td>
+        <td>{username}</td>
+        <td className="ticketContent" data-id={id}>{ticketcontent}</td>
+        <td>{date}</td>
+        <td className="buttons-container">
+          <button className="delete-btn" data-id={id}>Delete</button>
+          <button className="archive-btn" data-id={id}>Archive</button>
+        </td>   
+      </tr>
+     </tbody>
+  );
+  }
 
 
 function PageTitle() {
@@ -25,18 +57,15 @@ export default function DataTable() {
                         <th>Options</th>
                     </tr>
                 </thead>
-                <tbody id="data-table-body" className="data-table-body">
-                    <tr>
-                    <td>id</td>
-                    <td>username</td>
-                    <td className="ticketContent" data-id="${ticket.id}">ticketcontent</td>
-                    <td>date</td>
-                    <td className="buttons-container">
-                        <button className="delete-btn" data-id="${ticket.id}">Delete</button>
-                        <button className="archive-btn" data-id="${ticket.id}" data-archived="${ticket.isArchived}">Archive </button>
-                    </td>   
-                    </tr>
-                </tbody>
+                    {testDataArray.map(ticket => (
+                        <DataTableComponent
+                        key={ticket.id}
+                        id={ticket.id}
+                        username={ticket.username}
+                        ticketcontent={ticket.ticketcontent}
+                        date={ticket.date}
+                        />
+                    ))}
             </table>
         </div>
     </div>
