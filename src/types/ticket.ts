@@ -1,7 +1,7 @@
 export interface TicketInput {
   username: string;
   title: string;
-  content: string;
+  content?: string;
 }
 
 export interface Ticket extends TicketInput {

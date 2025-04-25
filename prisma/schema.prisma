@@ -8,9 +8,10 @@ datasource db {
 }
 
 model Ticket {
-  id        String   @id @default(cuid())
-  username  String
-  title     String
-  content   String
-  createdAt DateTime @default(now())
+  id         String   @id @default(cuid())
+  username   String
+  title      String
+  content    String
+  createdAt  DateTime @default(now())
+  isArchived Boolean  @default(false)
 }
