@@ -2,9 +2,11 @@
 
 import { Ticket } from "@/src/types/ticket";
 import { useEffect, useState } from "react";
+import DataTableButton from "./TicketTableButton";
 
 type TicketsTableProps = {
   isArchived: boolean;
+  
 };
 
 export default function TicketsTable({ isArchived }: TicketsTableProps) {
@@ -27,7 +29,14 @@ export default function TicketsTable({ isArchived }: TicketsTableProps) {
     fetchTickets();
   }, [isArchived]);
 
-  function DataTableComponent({ id, username, title, createdAt }: Ticket) {
+
+
+  function DataTableComponent({ id, username, title, createdAt, }: Ticket) {
+
+    const activeClass = "Archive";
+    const inactiveClass = "Unarchive";
+
+
     return (
       <tbody id="data-table-body" className="data-table-body">
         <tr>
@@ -45,20 +54,18 @@ export default function TicketsTable({ isArchived }: TicketsTableProps) {
           </td>
 
           <td className="buttons-container">
-            <button
-              className="delete-btn"
-              data-id={id}
-              onClick={() => deleteTicket(id)}
-            >
-              Delete
-            </button>
-            <button
-              className="archive-btn"
-              data-id={id}
-              onClick={() => archiveTicket(id)}
-            >
-              Archive
-            </button>
+            <DataTableButton 
+            name="Delete"
+            data-id={id}
+            onClick={() => deleteTicket(id)} 
+            className="delete-btn"
+            />
+            <DataTableButton 
+            name={isArchived ? "Unarchive" : "Archive"}
+            data-id={id}
+            onClick={() => (isArchived ? unArchiveTicket(id) : archiveTicket(id))}
+            className="archive-btn"
+            />
           </td>
         </tr>
       </tbody>
@@ -86,6 +93,25 @@ export default function TicketsTable({ isArchived }: TicketsTableProps) {
 
   function archiveTicket(id: string): void {
     fetch(`/api/tickets/${id}/archive`, {
+      method: "PATCH",
+    })
+      .then((response) => {
+        if (!response.ok) {
+          throw new Error("Network response was not ok");
+        }
+        return response.json();
+      })
+      .then((data) => {
+        console.log("Ticket archived:", data);
+        fetchTickets();
+      })
+      .catch((error) => {
+        console.error("Error archiving ticket:", error);
+      });
+  }
+
+  function unArchiveTicket(id: string): void {
+    fetch(`/api/tickets/${id}/unarchive`, {
       method: "PATCH",
     })
       .then((response) => {
