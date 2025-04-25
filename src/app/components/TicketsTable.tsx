@@ -1,6 +1,5 @@
 "use client";
 
-import { usePathname } from "next/navigation";
 import { Ticket } from "@/src/types/ticket";
 import { useEffect, useState } from "react";
 
