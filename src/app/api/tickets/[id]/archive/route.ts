@@ -5,9 +5,9 @@ const prisma = new PrismaClient();
 
 export async function PATCH(
   _req: NextRequest,
-  { params }: { params: { id: string } }
+  context: { params: Promise<{ id: string }> }
 ) {
-  const { id } = params;
+  const { id } = await context.params;
 
   try {
     const ticket = await prisma.ticket.findUnique({ where: { id } });

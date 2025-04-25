@@ -4,16 +4,29 @@ import { usePathname } from "next/navigation";
 import { Ticket } from "@/src/types/ticket";
 import { useEffect, useState } from "react";
 
-export default function TicketsTable() {
+type TicketsTableProps = {
+  isArchived: boolean;
+};
+
+export default function TicketsTable({ isArchived }: TicketsTableProps) {
   const [tickets, setTickets] = useState<Ticket[]>([]);
 
-  function PageTitle() {
-    const pathname = usePathname();
-    const title = pathname.includes("/admin/archived")
-      ? "Archived Tickets"
-      : "Open Tickets";
-    return <>{title}</>;
+  async function fetchTickets() {
+    const endpoint = isArchived ? "/api/tickets/archived" : "/api/tickets/open";
+
+    try {
+      const response = await fetch(endpoint);
+      if (!response.ok) throw new Error("Network response was not ok");
+      const data = await response.json();
+      setTickets(data);
+    } catch (error) {
+      console.error("Error fetching tickets:", error);
+    }
   }
+
+  useEffect(() => {
+    fetchTickets();
+  }, [isArchived]);
 
   function DataTableComponent({ id, username, title, createdAt }: Ticket) {
     return (
@@ -40,26 +53,17 @@ export default function TicketsTable() {
             >
               Delete
             </button>
-            <button className="archive-btn" data-id={id}>
+            <button
+              className="archive-btn"
+              data-id={id}
+              onClick={() => archiveTicket(id)}
+            >
               Archive
             </button>
           </td>
         </tr>
       </tbody>
     );
-  }
-
-  async function fetchTickets() {
-    try {
-      const response = await fetch("/api/tickets");
-      if (!response.ok) {
-        throw new Error("Network response was not ok");
-      }
-      const data = await response.json();
-      setTickets(data);
-    } catch (error) {
-      console.error("Error fetching tickets:", error);
-    }
   }
 
   function deleteTicket(id: string): void {
@@ -81,9 +85,24 @@ export default function TicketsTable() {
       });
   }
 
-  useEffect(() => {
-    fetchTickets();
-  }, []);
+  function archiveTicket(id: string): void {
+    fetch(`/api/tickets/${id}/archive`, {
+      method: "PATCH",
+    })
+      .then((response) => {
+        if (!response.ok) {
+          throw new Error("Network response was not ok");
+        }
+        return response.json();
+      })
+      .then((data) => {
+        console.log("Ticket archived:", data);
+        fetchTickets();
+      })
+      .catch((error) => {
+        console.error("Error archiving ticket:", error);
+      });
+  }
 
   return (
     <div className="right-column flex-[1_1_80%] box-border overflow-auto p-[25px]">
