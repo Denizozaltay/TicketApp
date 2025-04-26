@@ -11,7 +11,7 @@ type NavbarProps = {
 export default function Navbar({ isArchived, setIsArchived }: NavbarProps) {
   const activeClass = "bg-[#006fff14] rounded-[12px] [&_*]:text-blue-500 ";
   const inactiveClass =
-    "hover:bg-gray-100 rounded-[12px] [&>span]:text-[#000000bf] [&>svg]:text-grey-500";
+    "hover:bg-gray-100 rounded-[12px] [&>span]:text-[#000000bf] [&>svg]:text-gray-500";
 
   return (
     <div className="header-column flex flex-col flex-[0_0_20%] bg-[#FDFDFD] shadow-lg  text-white gap-4 p-4 box-border h-full overflow-hidden">
@@ -60,11 +60,16 @@ export default function Navbar({ isArchived, setIsArchived }: NavbarProps) {
               Archived Tickets
             </span>
           </div>
-          <div className="createticket hover:bg-gray-100 rounded-[12px] [&>svg]:text-grey-500 [&>a]:text-[#000000bf]">
-            <ChevronRight size={24} />
-            <Plus size={24} />
-            <Link href={"/"}>Create Ticket</Link>
-          </div>
+            <Link href={"/"} className="hover:bg-gray-100 rounded-[12px] [&>span]:text-[#000000bf] [&>svg]:text-gray-500
+            flex flex-1 no-underline py-5 dpx-0 box-content text-[1rem] gap-[0.5rem] transition-all duration-300 ease-in-out cursor-pointer
+            ">
+              <ChevronRight size={24} />
+              <Plus size={24} />
+              <span className="flex items-center font-medium">
+                Create Ticket
+              </span>
+            </Link>
+
         </div>
       </div>
     </div>

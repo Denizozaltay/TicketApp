@@ -1,6 +1,7 @@
 @import "tailwindcss";
-
-
+body {
+    font-family: var(--font-geist-sans);
+}
 
 .rounded-table th,
 .rounded-table td {
