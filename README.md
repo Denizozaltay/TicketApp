@@ -1,36 +1,141 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Ticket App
+
+Ticket management web application built with Next.js, TypeScript, Tailwind CSS, and Prisma.
+
+## Table of Contents
+
+- [Features](#features)
+- [Tech Stack](#tech-stack)
+- [Prerequisites](#prerequisites)
+- [Getting Started](#getting-started)
+- [Environment Variables](#environment-variables)
+- [Database Setup](#database-setup)
+- [Running the App](#running-the-app)
+- [API Endpoints](#api-endpoints)
+- [Docker Setup](#docker-setup)
+- [Contributing](#contributing)
+- [License](#license)
+
+## Features
+
+- Create new tickets
+- List open tickets
+- Archive and unarchive tickets
+- View archived tickets
+
+## Tech Stack
+
+- Next.js 15 (App Router)
+- React 19
+- TypeScript 5
+- Tailwind CSS 4
+- Prisma 6 ORM
+- PostgreSQL 17
+- Docker & Docker Compose
+
+## Prerequisites
+
+- Node.js >=16
+- npm or Yarn
+- Docker & Docker Compose (optional for containerized setup)
 
 ## Getting Started
 
-First, run the development server:
+1. Clone the repository:
+   ```bash
+   git clone https://github.com/<your-org>/ticket-app.git
+   cd ticket-app
+   ```
+
+2. Install dependencies:
+   ```bash
+   npm install
+   # or
+   yarn install
+   ```
+
+## Environment Variables
+
+Create a `.env` file in the project root with the following variables:
+
+```env
+# PostgreSQL database credentials
+POSTGRES_DB_USER=your_username
+POSTGRES_DB_PASSWORD=your_password
+POSTGRES_DB_NAME=your_database
+POSTGRES_DB_PORT=5432
+
+# Prisma connection URL
+DATABASE_URL=postgresql://${POSTGRES_DB_USER}:${POSTGRES_DB_PASSWORD}@localhost:${POSTGRES_DB_PORT}/${POSTGRES_DB_NAME}?schema=public
+```
+
+## Database Setup
+
+Run Prisma migrations to create the database schema:
+
+```bash
+npx prisma migrate dev --name init
+```
+
+You can also explore the database with Prisma Studio:
+
+```bash
+npx prisma studio
+```
+
+## Running the App
+
+### Development
 
 ```bash
 npm run dev
 # or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+ yarn dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Open `http://localhost:3000` in your browser.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+### Production
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+Build the app:
 
-## Learn More
+```bash
+npm run build
+```
 
-To learn more about Next.js, take a look at the following resources:
+Start the production server:
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+```bash
+npm start
+```
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+## API Endpoints
 
-## Deploy on Vercel
+The application exposes the following REST API endpoints under `/api/tickets`:
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+- `GET /api/tickets` - List all open tickets
+- `POST /api/tickets` - Create a new ticket
+- `GET /api/tickets/open` - List open tickets
+- `GET /api/tickets/archived` - List archived tickets
+- `GET /api/tickets/[id]` - Get ticket by ID
+- `PUT /api/tickets/[id]` - Update ticket by ID
+- `POST /api/tickets/[id]/archive` - Archive a ticket
+- `POST /api/tickets/[id]/unarchive` - Unarchive a ticket
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+## Docker Setup
+
+To run the app with Docker:
+
+```bash
+docker-compose up --build
+```
+
+This will start both the Next.js app and a PostgreSQL database.
+
+## Contributing
+
+Contributions are welcome! Feel free to open issues or submit pull requests.
+
+## License
+
+This project is licensed under the MIT License. See the LICENSE file for details.
