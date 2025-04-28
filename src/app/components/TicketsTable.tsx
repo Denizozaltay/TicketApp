@@ -3,14 +3,26 @@
 import { Ticket } from "@/src/types/ticket";
 import { useEffect, useState } from "react";
 import DataTableButton from "./TicketTableButton";
+import TicketModal from "./TicketModal";
 
 type TicketsTableProps = {
   isArchived: boolean;
-  
 };
 
 export default function TicketsTable({ isArchived }: TicketsTableProps) {
   const [tickets, setTickets] = useState<Ticket[]>([]);
+  const [selectedTicket, setSelectedTicket] = useState<Ticket | null>(null);
+  const [isModalOpen, setIsModalOpen] = useState(false);
+
+  function openModal(ticket: Ticket) {
+    setSelectedTicket(ticket);
+    setIsModalOpen(true);
+  }
+
+  function closeModal() {
+    setSelectedTicket(null);
+    setIsModalOpen(false);
+  }
 
   async function fetchTickets() {
     const endpoint = isArchived ? "/api/tickets/archived" : "/api/tickets/open";
@@ -29,17 +41,16 @@ export default function TicketsTable({ isArchived }: TicketsTableProps) {
     fetchTickets();
   }, [isArchived]);
 
-
-
-  function DataTableComponent({ id, username, title, createdAt, }: Ticket) {
-
+  function DataTableComponent({ id, username, title, createdAt }: Ticket) {
     const activeClass = "Archive";
     const inactiveClass = "Unarchive";
 
-
     return (
       <tbody id="data-table-body" className="data-table-body">
-        <tr>
+        <tr
+          className="cursor-pointer hover:bg-gray-100 transition duration-200"
+          onClick={() => openModal({ id, username, title, createdAt })}
+        >
           <td>{id}</td>
           <td>{username}</td>
           <td className="ticketContent" data-id={id}>
@@ -54,17 +65,19 @@ export default function TicketsTable({ isArchived }: TicketsTableProps) {
           </td>
 
           <td className="buttons-container">
-            <DataTableButton 
-            name="Delete"
-            data-id={id}
-            onClick={() => deleteTicket(id)} 
-            className="delete-btn"
+            <DataTableButton
+              name="Delete"
+              data-id={id}
+              onClick={() => deleteTicket(id)}
+              className="delete-btn"
             />
-            <DataTableButton 
-            name={isArchived ? "Unarchive" : "Archive"}
-            data-id={id}
-            onClick={() => (isArchived ? unArchiveTicket(id) : archiveTicket(id))}
-            className="archive-btn"
+            <DataTableButton
+              name={isArchived ? "Unarchive" : "Archive"}
+              data-id={id}
+              onClick={() =>
+                isArchived ? unArchiveTicket(id) : archiveTicket(id)
+              }
+              className="archive-btn"
             />
           </td>
         </tr>
@@ -155,6 +168,21 @@ export default function TicketsTable({ isArchived }: TicketsTableProps) {
             />
           ))}
         </table>
+        {isModalOpen && selectedTicket && (
+          <TicketModal
+            ticket={selectedTicket}
+            onClose={closeModal}
+            onDelete={deleteTicket}
+            onArchiveToggle={(id, isArchived) => {
+              if (isArchived) {
+                unArchiveTicket(id);
+              } else {
+                archiveTicket(id);
+              }
+            }}
+            isArchived={isArchived}
+          />
+        )}
       </div>
     </div>
   );

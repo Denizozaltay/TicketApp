@@ -42,8 +42,9 @@ Ticket management web application built with Next.js, TypeScript, Tailwind CSS, 
 ## Getting Started
 
 1. Clone the repository:
+
    ```bash
-   git clone https://github.com/<your-org>/ticket-app.git
+   git clone https://github.com/Denizozaltay/TicketApp.git
    cd ticket-app
    ```
 
