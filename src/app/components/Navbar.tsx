@@ -24,7 +24,7 @@ export default function Navbar({ isArchived, setIsArchived }: NavbarProps) {
             Ticket Manager
           </p>
           <p className="icontitle-desc text-[0.5rem] text-[rgba(0,0,0,0.25)]">
-            by Bluebrush technology
+            by HardEnder technology
           </p>
         </div>
         <div className="arrowicon text-[rgba(0,0,0,0.15)]">
@@ -60,16 +60,16 @@ export default function Navbar({ isArchived, setIsArchived }: NavbarProps) {
               Archived Tickets
             </span>
           </div>
-            <Link href={"/"} className="hover:bg-gray-100 rounded-[12px] [&>span]:text-[#000000bf] [&>svg]:text-gray-500
+          <Link
+            href={"/"}
+            className="hover:bg-gray-100 rounded-[12px] [&>span]:text-[#000000bf] [&>svg]:text-gray-500
             flex flex-1 no-underline py-5 dpx-0 box-content text-[1rem] gap-[0.5rem] transition-all duration-300 ease-in-out cursor-pointer
-            ">
-              <ChevronRight size={24} />
-              <Plus size={24} />
-              <span className="flex items-center font-medium">
-                Create Ticket
-              </span>
-            </Link>
-
+            "
+          >
+            <ChevronRight size={24} />
+            <Plus size={24} />
+            <span className="flex items-center font-medium">Create Ticket</span>
+          </Link>
         </div>
       </div>
     </div>
