@@ -16,7 +16,7 @@ export default function TicketsTable({ isArchived }: TicketsTableProps) {
 
   function openModal(ticket: Ticket) {
     setSelectedTicket(ticket);
-    setIsModalOpen(true);
+      setIsModalOpen(true);
   }
 
   function closeModal() {

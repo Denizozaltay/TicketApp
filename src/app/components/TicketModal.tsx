@@ -45,23 +45,24 @@ export default function TicketModal({
     <div className="fixed inset-0 bg-black/35 flex justify-center items-center z-50">
       <div className="popup flex flex-col w-[840px] h-[592px] bg-white rounded-[24px] shadow-lg">
         {/* Üst başlık ve kapatma */}
-        <div className="flex-[1.5] flex flex-row m-[15px] box-border w-auto">
+        <div className="flex-[1.5] flex flex-row m-[15px] box-border w-auto mb-10">
           <div>
-            <button onClick={onClose}>
+            <button className="cursor-pointer" onClick={onClose}>
               <X />
             </button>
           </div>
-          <div className="flex flex-1 flex-row justify-center items-center">
+          <div className="flex flex-1 justify-center items-center">
             <h1 className="text-[3rem] text-center font-medium bg-gradient-to-t from-[#006EFF] via-[#00BCFF] to-[#00D9FF] bg-clip-text text-transparent">
-              Ticket {ticket.id}
+              Ticket <span className="text-[1rem] align-middle truncate w-[10ch] bg-gradient-to-t from-[#006EFF] via-[#00BCFF] to-[#00D9FF] bg-clip-text text-transparent">#{ticket.id}</span>
             </h1>
+            
           </div>
         </div>
 
         {/* İçerik bölümü */}
         <div className="flex flex-[8.5] flex-row p-6 pt-0 gap-8 overflow-hidden">
           {/* Sol taraf: bilgiler ve butonlar */}
-          <div className="flex-[2] box-border flex flex-col gap-4">
+          <div className="flex-[2] box-border flex flex-col gap-4 overflow-hidden whitespace-nowrap text-ellipsis">
             <DataBlock title="ID" data={ticket.id} />
             <DataBlock title="Username" data={ticket.username} />
             <DataBlock
@@ -69,16 +70,16 @@ export default function TicketModal({
               data={new Date(ticket.createdAt).toLocaleDateString("tr-TR")}
             />
 
-            <div className="flex flex-col gap-4 mt-6">
+            <div className="flex flex-col gap-1 ">
               <DataTableButton
                 name="Delete"
-                onClick={() => onDelete(ticket.id)}
-                className="bg-red-500 hover:bg-red-600 text-white py-2 px-4 rounded-lg"
+                onClick={() => {onDelete(ticket.id); onClose();}}
+                className="delete-btn"
               />
               <DataTableButton
                 name={isArchived ? "Unarchive" : "Archive"}
-                onClick={() => onArchiveToggle(ticket.id, isArchived)}
-                className="bg-blue-500 hover:bg-blue-600 text-white py-2 px-4 rounded-lg"
+                onClick={() => {onArchiveToggle(ticket.id, isArchived); onClose()}}
+                className="archive-btn"
               />
             </div>
           </div>
