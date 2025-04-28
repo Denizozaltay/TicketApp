@@ -16,7 +16,7 @@ export default function TicketsTable({ isArchived }: TicketsTableProps) {
 
   function openModal(ticket: Ticket) {
     setSelectedTicket(ticket);
-      setIsModalOpen(true);
+    setIsModalOpen(true);
   }
 
   function closeModal() {
@@ -41,45 +41,43 @@ export default function TicketsTable({ isArchived }: TicketsTableProps) {
     fetchTickets();
   }, [isArchived]);
 
-  function DataTableComponent({ id, username, title, createdAt }: Ticket) {
-    const activeClass = "Archive";
-    const inactiveClass = "Unarchive";
-
+  function DataTableComponent({ ticket }: { ticket: Ticket }) {
     return (
       <tbody id="data-table-body" className="data-table-body">
         <tr
           className="cursor-pointer hover:bg-gray-100 transition duration-200"
-          onClick={() => openModal({ id, username, title, createdAt })}
+          onClick={() => openModal(ticket)}
         >
-          <td>{id}</td>
-          <td>{username}</td>
-          <td className="ticketContent" data-id={id}>
-            {title}
+          <td>{ticket.id}</td>
+          <td>{ticket.username}</td>
+          <td className="ticketContent" data-id={ticket.id}>
+            {ticket.title}
           </td>
           <td>
-            {new Date(createdAt).toLocaleDateString("tr-TR")}{" "}
-            {new Date(createdAt).toLocaleTimeString("tr-TR", {
+            {new Date(ticket.createdAt).toLocaleDateString("tr-TR")}{" "}
+            {new Date(ticket.createdAt).toLocaleTimeString("tr-TR", {
               hour: "2-digit",
               minute: "2-digit",
             })}
           </td>
-
           <td className="buttons-container">
             <DataTableButton
               name="Delete"
-              data-id={id}
+              data-id={ticket.id}
               onClick={(e) => {
                 e.stopPropagation();
-                deleteTicket(id);
+                deleteTicket(ticket.id);
               }}
               className="delete-btn"
             />
             <DataTableButton
               name={isArchived ? "Unarchive" : "Archive"}
-              data-id={id}
+              data-id={ticket.id}
               onClick={(e) => {
                 e.stopPropagation();
-                isArchived ? unArchiveTicket(id) : archiveTicket(id);
+                isArchived
+                  ? unArchiveTicket(ticket.id)
+                  : archiveTicket(ticket.id);
               }}
               className="archive-btn"
             />
@@ -90,17 +88,12 @@ export default function TicketsTable({ isArchived }: TicketsTableProps) {
   }
 
   function deleteTicket(id: string): void {
-    fetch(`/api/tickets/${id}`, {
-      method: "DELETE",
-    })
+    fetch(`/api/tickets/${id}`, { method: "DELETE" })
       .then((response) => {
-        if (!response.ok) {
-          throw new Error("Network response was not ok");
-        }
+        if (!response.ok) throw new Error("Network response was not ok");
         return response.json();
       })
-      .then((data) => {
-        console.log("Ticket deleted:", data);
+      .then(() => {
         fetchTickets();
       })
       .catch((error) => {
@@ -109,17 +102,12 @@ export default function TicketsTable({ isArchived }: TicketsTableProps) {
   }
 
   function archiveTicket(id: string): void {
-    fetch(`/api/tickets/${id}/archive`, {
-      method: "PATCH",
-    })
+    fetch(`/api/tickets/${id}/archive`, { method: "PATCH" })
       .then((response) => {
-        if (!response.ok) {
-          throw new Error("Network response was not ok");
-        }
+        if (!response.ok) throw new Error("Network response was not ok");
         return response.json();
       })
-      .then((data) => {
-        console.log("Ticket archived:", data);
+      .then(() => {
         fetchTickets();
       })
       .catch((error) => {
@@ -128,21 +116,16 @@ export default function TicketsTable({ isArchived }: TicketsTableProps) {
   }
 
   function unArchiveTicket(id: string): void {
-    fetch(`/api/tickets/${id}/unarchive`, {
-      method: "PATCH",
-    })
+    fetch(`/api/tickets/${id}/unarchive`, { method: "PATCH" })
       .then((response) => {
-        if (!response.ok) {
-          throw new Error("Network response was not ok");
-        }
+        if (!response.ok) throw new Error("Network response was not ok");
         return response.json();
       })
-      .then((data) => {
-        console.log("Ticket archived:", data);
+      .then(() => {
         fetchTickets();
       })
       .catch((error) => {
-        console.error("Error archiving ticket:", error);
+        console.error("Error unarchiving ticket:", error);
       });
   }
 
@@ -153,7 +136,7 @@ export default function TicketsTable({ isArchived }: TicketsTableProps) {
       </h1>
       <div className="data-column flex-[1_1] p-[50px] box-border overflow-auto">
         <table className="rounded-table border-separate border-spacing-0 w-full">
-          <thead className="">
+          <thead>
             <tr>
               <th>ID</th>
               <th>Username</th>
@@ -163,13 +146,7 @@ export default function TicketsTable({ isArchived }: TicketsTableProps) {
             </tr>
           </thead>
           {tickets.map((ticket) => (
-            <DataTableComponent
-              key={ticket.id}
-              id={ticket.id}
-              username={ticket.username}
-              title={ticket.title}
-              createdAt={ticket.createdAt}
-            />
+            <DataTableComponent key={ticket.id} ticket={ticket} />
           ))}
         </table>
         {isModalOpen && selectedTicket && (

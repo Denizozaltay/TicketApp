@@ -1,19 +1,14 @@
-import { NextRequest, NextResponse } from "next/server";
-import { PrismaClient } from "@prisma/client";
+import { getOpenTickets } from "@/src/lib/db/models/ticket";
+import { NextResponse } from "next/server";
 
-const prisma = new PrismaClient();
-
-export async function GET(_req: NextRequest) {
+export async function GET() {
   try {
-    const archivedTickets = await prisma.ticket.findMany({
-      where: { isArchived: false },
-      orderBy: { createdAt: "desc" },
-    });
-
-    return NextResponse.json(archivedTickets);
+    const openTickets = await getOpenTickets();
+    return NextResponse.json(openTickets, { status: 200 });
   } catch (err) {
+    console.error("GET /api/tickets/open error:", err);
     return NextResponse.json(
-      { error: "Arşivlenmiş ticketlar alınamadı" },
+      { error: "Failed to fetch open tickets." },
       { status: 500 }
     );
   }

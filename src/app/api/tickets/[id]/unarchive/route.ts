@@ -1,28 +1,27 @@
 import { NextRequest, NextResponse } from "next/server";
-import { PrismaClient } from "@prisma/client";
-
-const prisma = new PrismaClient();
+import { getTicketById, unarchiveTicket } from "@/src/lib/db/models/ticket";
 
 export async function PATCH(
   _req: NextRequest,
-  context: { params: Promise<{ id: string }> }
+  { params }: { params: { id: string } }
 ) {
-  const { id } = await context.params;
+  const { id } = await params;
 
   try {
-    const ticket = await prisma.ticket.findUnique({ where: { id } });
+    const ticket = await getTicketById(id);
 
     if (!ticket) {
-      return NextResponse.json({ error: "Ticket bulunamadı" }, { status: 404 });
+      return NextResponse.json({ error: "Ticket not found." }, { status: 404 });
     }
 
-    const updated = await prisma.ticket.update({
-      where: { id },
-      data: { isArchived: false },
-    });
+    const updatedTicket = await unarchiveTicket(id);
 
-    return NextResponse.json(updated);
+    return NextResponse.json(updatedTicket, { status: 200 });
   } catch (err) {
-    return NextResponse.json({ error: "Arşivden çıkaramama hatası" }, { status: 500 });
+    console.error("PATCH /api/tickets/:id/unarchive error:", err);
+    return NextResponse.json(
+      { error: "Failed to unarchive the ticket." },
+      { status: 500 }
+    );
   }
 }

@@ -7,11 +7,23 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
+model User {
+  id        String   @id @default(uuid())
+  username  String   @unique
+  email     String   @unique
+  password  String
+  role      String   @default("user")
+  createdAt DateTime @default(now())
+  tickets   Ticket[]
+}
+
 model Ticket {
   id         String   @id @default(cuid())
   username   String
   title      String
   content    String
   createdAt  DateTime @default(now())
+  userId     String
+  user       User     @relation(fields: [userId], references: [id])
   isArchived Boolean  @default(false)
 }

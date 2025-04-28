@@ -1,41 +1,46 @@
 import { NextRequest, NextResponse } from "next/server";
-import { PrismaClient } from "@prisma/client";
-import { Ticket, TicketInput } from "@/src/types/ticket";
-
-const prisma = new PrismaClient();
+import { TicketInput } from "@/src/types/ticket";
+import { getAllTickets, createTicket } from "@/src/lib/db/models/ticket";
 
 export async function GET() {
   try {
-    const tickets: Ticket[] = await prisma.ticket.findMany({
-      orderBy: { createdAt: "desc" },
-    });
+    const tickets = await getAllTickets();
 
-    return NextResponse.json(tickets);
+    return NextResponse.json(tickets, { status: 200 });
   } catch (err) {
     console.error("GET /api/tickets error:", err);
-    return NextResponse.json({ error: "Listeleme hatası" }, { status: 500 });
+    return NextResponse.json(
+      { message: "Failed to fetch tickets." },
+      { status: 500 }
+    );
   }
 }
 
 export async function POST(req: NextRequest) {
   try {
     const body: TicketInput = await req.json();
-    const { username, title, content } = body;
+    const { username, title, content, userId } = body;
 
-    if (!username?.trim() || !title?.trim() || !content?.trim()) {
+    if (
+      !username?.trim() ||
+      !title?.trim() ||
+      !content?.trim() ||
+      !userId?.trim()
+    ) {
       return NextResponse.json(
-        { error: "Kullanıcı adı, başlık ve içerik zorunludur" },
+        { message: "All fields are required" },
         { status: 400 }
       );
     }
 
-    const newTicket: Ticket = await prisma.ticket.create({
-      data: { username, title, content },
-    });
+    const newTicket = await createTicket({ username, title, content, userId });
 
     return NextResponse.json(newTicket, { status: 201 });
   } catch (err) {
     console.error("POST /api/tickets error:", err);
-    return NextResponse.json({ error: "Oluşturma hatası" }, { status: 500 });
+    return NextResponse.json(
+      { message: "Error creating ticket" },
+      { status: 500 }
+    );
   }
 }
