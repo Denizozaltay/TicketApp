@@ -68,15 +68,19 @@ export default function TicketsTable({ isArchived }: TicketsTableProps) {
             <DataTableButton
               name="Delete"
               data-id={id}
-              onClick={() => deleteTicket(id)}
+              onClick={(e) => {
+                e.stopPropagation();
+                deleteTicket(id);
+              }}
               className="delete-btn"
             />
             <DataTableButton
               name={isArchived ? "Unarchive" : "Archive"}
               data-id={id}
-              onClick={() =>
-                isArchived ? unArchiveTicket(id) : archiveTicket(id)
-              }
+              onClick={(e) => {
+                e.stopPropagation();
+                isArchived ? unArchiveTicket(id) : archiveTicket(id);
+              }}
               className="archive-btn"
             />
           </td>
