@@ -8,7 +8,10 @@ type NavbarProps = {
   setIsArchived: (val: boolean) => void;
 };
 
-export default function Navbar({ isArchived, setIsArchived }: NavbarProps) {
+export default function AdminNavbar({
+  isArchived,
+  setIsArchived,
+}: NavbarProps) {
   const activeClass = "bg-[#006fff14] rounded-[12px] [&_*]:text-blue-500 ";
   const inactiveClass =
     "hover:bg-gray-100 rounded-[12px] [&>span]:text-[#000000bf] [&>svg]:text-gray-500";

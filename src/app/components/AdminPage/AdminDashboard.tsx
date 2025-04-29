@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import Navbar from "./Navbar";
+import AdminNavbar from "./AdminNavbar";
 import TicketsTable from "./TicketsTable";
 
 export default function AdminDashboard() {
@@ -9,7 +9,7 @@ export default function AdminDashboard() {
 
   return (
     <div className="flex h-screen">
-      <Navbar isArchived={isArchived} setIsArchived={setIsArchived} />
+      <AdminNavbar isArchived={isArchived} setIsArchived={setIsArchived} />
       <TicketsTable isArchived={isArchived} />
     </div>
   );

@@ -2,6 +2,8 @@ import { getUserByEmail } from "@/src/lib/db/models/user";
 import { LoginInput, PublicUser } from "@/src/types/user";
 import { NextRequest, NextResponse } from "next/server";
 import bcrypt from "bcrypt";
+import { signJwtToken } from "@/src/lib/auth/jwt";
+import { cookies } from "next/headers";
 
 export async function POST(req: NextRequest) {
   try {
@@ -39,6 +41,20 @@ export async function POST(req: NextRequest) {
       role: user.role as "user" | "admin",
       createdAt: user.createdAt,
     };
+
+    const token = signJwtToken({
+      id: user.id,
+      email: user.email,
+      role: user.role,
+    });
+
+    const cookieStore = await cookies();
+    cookieStore.set("token", token, {
+      httpOnly: true,
+      secure: process.env.NODE_ENV === "production",
+      path: "/",
+      maxAge: 60 * 60 * 24 * 7,
+    });
 
     return NextResponse.json(
       {
