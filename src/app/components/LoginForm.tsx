@@ -3,8 +3,9 @@
 import { Input } from "@/components/ui/input";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Button } from "@/components/ui/button";
-import { Link, LogIn } from "lucide-react";
+import { LogIn } from "lucide-react";
 import { useState } from "react";
+import Link from "next/link";
 
 export default function LoginForm() {
   const [email, setEmail] = useState("");
@@ -26,8 +27,6 @@ export default function LoginForm() {
     // logic buraya yazilacak
     // email ve password değişkenleri var
     // bu degiskenleri auth'a POST istegi ile gonderebiliz, scope içinde
-    
-
   };
 
   return (
@@ -38,11 +37,11 @@ export default function LoginForm() {
           <p className="text-sm font-light">Please enter your details</p>
         </div>
         <div className="flex">
-            {/* formun login buttonuna herhangi bir action ekleme
+          {/* formun login buttonuna herhangi bir action ekleme
             form oldugu icin otomatik olarak submit işlemi yapar
             TODO: handleSubmit metoduna logic eklenmeli
             */}
-            
+
           <form className="flex flex-col gap-5" onSubmit={handleSubmit}>
             <div className="flex-1 w-75">
               <label htmlFor="email">Email Adress</label>
@@ -75,7 +74,7 @@ export default function LoginForm() {
                 Remember for 30 days
               </label>
             </div>
-            
+
             {/* şifreyi burada da ayriyeten dogrulayabiliriz, backendde de 2. defa
             error proof olur 
             */}
@@ -85,7 +84,6 @@ export default function LoginForm() {
               <LogIn /> Login
             </Button>
           </form>
-
         </div>
         <div className="flex flex-row justify-between text-sm opacity-70">
           <p>Dont have an account?</p>
@@ -94,7 +92,9 @@ export default function LoginForm() {
                 veyahutta form, sign up'a basınca conditional rendering ile register sayfası
                 render edilebilir
                 */}
-          <p className="underline">Sign Up</p>
+          <Link href={"/register"} className="underline">
+            Sign Up
+          </Link>
         </div>
       </div>
     </>

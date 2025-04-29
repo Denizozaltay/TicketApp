@@ -2,7 +2,8 @@
 
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
-import { Link, LogIn } from "lucide-react";
+import { LogIn } from "lucide-react";
+import Link from "next/link";
 import { useState } from "react";
 
 export default function RegisterForm() {
@@ -39,8 +40,6 @@ export default function RegisterForm() {
     // logic buraya yazilacak
     // email ve password değişkenleri var
     // bu degiskenleri auth'a POST istegi ile gonderebiliz, scope içinde
-    
-
   };
 
   return (
@@ -51,11 +50,11 @@ export default function RegisterForm() {
           <p className="text-sm font-light">Please enter your details</p>
         </div>
         <div className="flex">
-            {/* formun register buttonuna herhangi bir action ekleme
+          {/* formun register buttonuna herhangi bir action ekleme
             form oldugu icin otomatik olarak submit işlemi yapar
             TODO: handleSubmit metoduna logic eklenmeli
             */}
-            
+
           <form className="flex flex-col gap-10" onSubmit={handleSubmit}>
             <div className="flex flex-1 w-90 flex-col gap-2">
               <label htmlFor="email">Email Adress</label>
@@ -86,7 +85,7 @@ export default function RegisterForm() {
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
                 required
-              /> 
+              />
               {}
               <label htmlFor="password2">Confirm Password</label>
               <Input
@@ -98,7 +97,7 @@ export default function RegisterForm() {
                 required
               />
             </div>
-            
+
             {/* şifre/email aynı değilse uyar*/}
             {error && <p className="text-red-500 text-sm">{error}</p>}
 
@@ -106,7 +105,6 @@ export default function RegisterForm() {
               <LogIn /> Register
             </Button>
           </form>
-
         </div>
         <div className="flex flex-row justify-between text-sm opacity-70">
           <p>Do you have an account?</p>
@@ -115,7 +113,9 @@ export default function RegisterForm() {
                 veyahutta form, sign up'a basınca conditional rendering ile login sayfası
                 render edilebilir
                 */}
-          <p className="underline">Log in</p>
+          <Link href={"/login"} className="underline">
+            Log in
+          </Link>
         </div>
       </div>
     </>
