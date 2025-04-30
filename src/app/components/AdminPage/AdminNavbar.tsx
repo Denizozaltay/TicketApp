@@ -1,15 +1,15 @@
 "use client";
 
-import { Archive, ChevronLeft, ChevronRight, Home, LogOut, Plus } from "lucide-react";
+import {
+  Archive,
+  ChevronLeft,
+  ChevronRight,
+  Home,
+  LogOut,
+  Plus,
+} from "lucide-react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-
-const handleLogout = async () => {
-  const router = useRouter();
-  await fetch("/api/auth/logout", { method: "POST" });
-  router.refresh();
-};
-
 
 type NavbarProps = {
   isArchived: boolean;
@@ -20,6 +20,13 @@ export default function AdminNavbar({
   isArchived,
   setIsArchived,
 }: NavbarProps) {
+  const router = useRouter();
+
+  async function handleLogout() {
+    await fetch("/api/auth/logout", { method: "POST" });
+    router.refresh();
+  }
+
   const activeClass = "bg-[#006fff14] rounded-[12px] [&_*]:text-blue-500 ";
   const inactiveClass =
     "hover:bg-gray-100 rounded-[12px] [&>span]:text-[#000000bf] [&>svg]:text-gray-500";
