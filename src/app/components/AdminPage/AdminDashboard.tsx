@@ -8,7 +8,7 @@ export default function AdminDashboard() {
   const [isArchived, setIsArchived] = useState(false);
 
   return (
-    <div className="flex h-screen">
+    <div className="flex flex-row h-screen">
       <AdminNavbar isArchived={isArchived} setIsArchived={setIsArchived} />
       <TicketsTable isArchived={isArchived} />
     </div>

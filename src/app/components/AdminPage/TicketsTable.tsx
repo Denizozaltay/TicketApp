@@ -4,6 +4,7 @@ import { Ticket } from "@/src/types/ticket";
 import { useEffect, useState } from "react";
 import DataTableButton from "./TicketTableButton";
 import TicketModal from "./TicketModal";
+import { LoaderCircle } from "lucide-react";
 
 type TicketsTableProps = {
   isArchived: boolean;
@@ -13,6 +14,8 @@ export default function TicketsTable({ isArchived }: TicketsTableProps) {
   const [tickets, setTickets] = useState<Ticket[]>([]);
   const [selectedTicket, setSelectedTicket] = useState<Ticket | null>(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
+
+  const [isLoading, setIsLoading] = useState(false);
 
   function openModal(ticket: Ticket) {
     setSelectedTicket(ticket);
@@ -28,12 +31,16 @@ export default function TicketsTable({ isArchived }: TicketsTableProps) {
     const endpoint = isArchived ? "/api/tickets/archived" : "/api/tickets/open";
 
     try {
+      setIsLoading(true)
       const response = await fetch(endpoint);
       if (!response.ok) throw new Error("Network response was not ok");
       const data = await response.json();
       setTickets(data);
     } catch (error) {
       console.error("Error fetching tickets:", error);
+      setIsLoading(false)
+    } finally {
+      setIsLoading(false)
     }
   }
 
@@ -45,7 +52,7 @@ export default function TicketsTable({ isArchived }: TicketsTableProps) {
     return (
       <tbody id="data-table-body" className="data-table-body">
         <tr
-          className="cursor-pointer hover:bg-gray-100 transition duration-200"
+          className="cursor-pointer hover:bg-gray-100 rounded-4xl transition duration-200"
           onClick={() => openModal(ticket)}
         >
           <td>{ticket.id}</td>
@@ -145,10 +152,14 @@ export default function TicketsTable({ isArchived }: TicketsTableProps) {
               <th>Options</th>
             </tr>
           </thead>
-          {tickets.map((ticket) => (
-            <DataTableComponent key={ticket.id} ticket={ticket} />
+          {!isLoading && tickets.map((ticket) => (
+            <DataTableComponent key={ticket.id} ticket={ticket} /> 
           ))}
         </table>
+        {isLoading ? (
+            <div className="flex pt-5"><LoaderCircle size={32} className=" ml-auto mr-auto animate-spin opacity-65"/></div>
+        ) : (
+        ``)}
         {isModalOpen && selectedTicket && (
           <TicketModal
             ticket={selectedTicket}

@@ -7,8 +7,8 @@ import DataTableButton from "./TicketTableButton";
 function DataBlock({ title, data }: { title: string; data: string }) {
   return (
     <div className="datablockpopup flex flex-1 flex-col">
-      <h1 className="font-semibold text-[24px] antialiased">{title}</h1>
-      <p className="font-light text-[18px] antialiased break-words">{data}</p>
+      <h1 className="font-medium text-[22px] antialiased">{title}</h1>
+      <p className="font-light text-[16px] antialiased break-words">{data}</p>
     </div>
   );
 }
@@ -35,7 +35,7 @@ export default function TicketModal({
       <div className="popup flex flex-col w-[840px] h-[592px] bg-white rounded-[24px] shadow-lg">
         {/* Header */}
         <div className="flex-[1.5] flex flex-row m-[15px] box-border w-auto mb-6">
-          <button className="cursor-pointer" onClick={onClose}>
+          <button className="flex cursor-pointer" onClick={onClose}>
             <X />
           </button>
           <div className="flex flex-1 justify-center items-center">
@@ -84,11 +84,11 @@ export default function TicketModal({
           </div>
 
           {/* Right Side */}
-          <div className="flex flex-col flex-[8] min-w-0 overflow-scroll">
+          <div className="flex flex-col flex-[8] overflow-scroll overflow-x-hidden">
             <p className="font-semibold text-[24px] antialiased mb-2">
               Description
             </p>
-            <p className="flex-1 font-light text-[16px] antialiased break-words whitespace-pre-wrap">
+            <p className="flex-1 font-light text-[16px] align text-justify antialiased break-words whitespace-pre-wrap">
               {ticket.content}
             </p>
           </div>
