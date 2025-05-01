@@ -12,3 +12,29 @@ export async function getUserByEmail(email: string) {
     where: { email },
   });
 }
+
+export async function verifyUserEmail(token: string) {
+  const user = await prisma.user.findFirst({
+    where: {
+      emailVerifyToken: token,
+      emailTokenExpiresAt: {
+        gte: new Date(),
+      },
+    },
+  });
+
+  if (!user) {
+    return null;
+  }
+
+  const updatedUser = await prisma.user.update({
+    where: { id: user.id },
+    data: {
+      isVerified: true,
+      emailVerifyToken: null,
+      emailTokenExpiresAt: null,
+    },
+  });
+
+  return updatedUser;
+}

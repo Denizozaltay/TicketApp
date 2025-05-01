@@ -8,13 +8,16 @@ datasource db {
 }
 
 model User {
-  id        String   @id @default(uuid())
-  username  String   @unique
-  email     String   @unique
-  password  String
-  role      String   @default("user")
-  createdAt DateTime @default(now())
-  tickets   Ticket[]
+  id                  String    @id @default(uuid())
+  username            String    @unique
+  email               String    @unique
+  password            String
+  role                String    @default("user")
+  createdAt           DateTime  @default(now())
+  tickets             Ticket[]
+  isVerified          Boolean   @default(false)
+  emailVerifyToken    String?   @unique
+  emailTokenExpiresAt DateTime?
 }
 
 model Ticket {

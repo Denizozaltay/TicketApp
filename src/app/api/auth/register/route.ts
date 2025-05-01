@@ -2,6 +2,8 @@ import { UserInput } from "@/src/types/user";
 import { createUser, getUserByEmail } from "@/src/lib/db/models/user";
 import { NextRequest, NextResponse } from "next/server";
 import bcrypt from "bcrypt";
+import crypto from "crypto";
+import { sendVerificationEmail } from "@/src/lib/mail/sendVerificationEmail";
 
 export async function POST(req: NextRequest) {
   try {
@@ -25,15 +27,22 @@ export async function POST(req: NextRequest) {
     const salt = await bcrypt.genSalt(10);
     const hashedPassword = await bcrypt.hash(password, salt);
 
+    const emailVerifyToken = crypto.randomBytes(32).toString("hex");
+    const emailTokenExpiresAt = new Date(Date.now() + 1000 * 60 * 60);
+
     const newUser = await createUser({
       email,
       password: hashedPassword,
       username,
+      emailVerifyToken,
+      emailTokenExpiresAt,
     });
+
+    await sendVerificationEmail(newUser, emailVerifyToken);
 
     return NextResponse.json(
       {
-        message: "User created successfully.",
+        message: "User created successfully. Please verify your email.",
         user: {
           id: newUser.id,
           username: newUser.username,

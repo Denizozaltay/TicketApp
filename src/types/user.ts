@@ -2,11 +2,15 @@ export interface UserInput {
   username: string;
   email: string;
   password: string;
+  emailVerifyToken?: string | null;
+  emailTokenExpiresAt?: Date | null;
+  isVerified?: boolean;
 }
 
 export interface LoginInput {
   email: string;
   password: string;
+  rememberMe: boolean;
 }
 
 export interface UserRecord {
@@ -16,6 +20,9 @@ export interface UserRecord {
   password: string;
   role: "user" | "admin";
   createdAt: Date;
+  isVerified: boolean;
+  emailVerifyToken: string | null;
+  emailTokenExpiresAt: Date | null;
 }
 
 export interface PublicUser {

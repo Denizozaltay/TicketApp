@@ -7,7 +7,7 @@ import { cookies } from "next/headers";
 
 export async function POST(req: NextRequest) {
   try {
-    const { email, password }: LoginInput = await req.json();
+    const { email, password, rememberMe }: LoginInput = await req.json();
 
     if (!email || !password) {
       return NextResponse.json(
@@ -34,6 +34,15 @@ export async function POST(req: NextRequest) {
       );
     }
 
+    const isEmailVerified = user.isVerified;
+
+    if (!isEmailVerified) {
+      return NextResponse.json(
+        { message: "Please verify your email before logging in." },
+        { status: 403 }
+      );
+    }
+
     const publicUser: PublicUser = {
       id: user.id,
       username: user.username,
@@ -50,12 +59,21 @@ export async function POST(req: NextRequest) {
     });
 
     const cookieStore = await cookies();
-    cookieStore.set("token", token, {
-      httpOnly: true,
-      secure: process.env.NODE_ENV === "production",
-      path: "/",
-      maxAge: 60 * 60 * 24 * 7,
-    });
+
+    if (rememberMe) {
+      cookieStore.set("token", token, {
+        httpOnly: true,
+        secure: process.env.NODE_ENV === "production",
+        path: "/",
+        maxAge: 60 * 60 * 24 * 7,
+      });
+    } else {
+      cookieStore.set("token", token, {
+        httpOnly: true,
+        secure: process.env.NODE_ENV === "production",
+        path: "/",
+      });
+    }
 
     return NextResponse.json(
       {
