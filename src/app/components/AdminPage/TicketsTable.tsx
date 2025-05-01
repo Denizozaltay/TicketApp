@@ -4,7 +4,8 @@ import { Ticket } from "@/src/types/ticket";
 import { useEffect, useState } from "react";
 import DataTableButton from "./TicketTableButton";
 import TicketModal from "./TicketModal";
-import { LoaderCircle } from "lucide-react";
+import { ArrowBigLeft, ArrowBigRight, LoaderCircle } from "lucide-react";
+import { ticketData } from "../../(pages)/comptest/page";
 
 type TicketsTableProps = {
   isArchived: boolean;
@@ -14,6 +15,16 @@ export default function TicketsTable({ isArchived }: TicketsTableProps) {
   const [tickets, setTickets] = useState<Ticket[]>([]);
   const [selectedTicket, setSelectedTicket] = useState<Ticket | null>(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [page, setPage] = useState(1);
+  const limit = 10;
+
+  function nextPage() {
+    setPage((prev) => prev + 1)
+  }
+
+  function previousPage() {
+    setPage((prev) => prev + -1)
+  }
 
   const [isLoading, setIsLoading] = useState(false);
 
@@ -28,7 +39,8 @@ export default function TicketsTable({ isArchived }: TicketsTableProps) {
   }
 
   async function fetchTickets() {
-    const endpoint = isArchived ? "/api/tickets/archived" : "/api/tickets/open";
+    const endpointBase = isArchived ? "/api/tickets/archived" : "/api/tickets/open";
+    const endpoint = `${endpointBase}?page=${page}&limit=${limit}`
 
     try {
       setIsLoading(true)
@@ -46,7 +58,30 @@ export default function TicketsTable({ isArchived }: TicketsTableProps) {
 
   useEffect(() => {
     fetchTickets();
-  }, [isArchived]);
+  }, [isArchived, page]);
+
+
+
+  function DataPageButtons() {
+    return (
+      <>
+        <div className="flex flex-row gap-2 ml-auto pr-[50px] pt-2">
+          <button 
+            onClick={previousPage} 
+            disabled={page === 1}
+            className="w-32 cursor-pointer flex flex-row justify-center items-center gap-1 text-s text-blue-500 border border-blue-500 px-3 py-1 rounded hover:bg-blue-500 hover:text-white transition">
+              <ArrowBigLeft/> Previous
+          </button>
+          <button 
+            onClick={nextPage} 
+            disabled={tickets.length < limit }
+            className="w-32 cursor-pointer flex flex-row justify-center items-center gap-1 text-s text-blue-500 border border-blue-500 px-3 py-1 rounded hover:bg-blue-500 hover:text-white transition">
+              Next <ArrowBigRight/>
+          </button>
+        </div>
+      </>
+    )
+  }
 
   function DataTableComponent({ ticket }: { ticket: Ticket }) {
     return (
@@ -137,7 +172,7 @@ export default function TicketsTable({ isArchived }: TicketsTableProps) {
   }
 
   return (
-    <div className="right-column flex-[1_1_80%] box-border overflow-auto p-[25px]">
+    <div className="flex flex-col right-column flex-[1_1_80%] box-border overflow-auto p-[25px]">
       <h1 className="content-title text-[4rem] text-center font-medium bg-gradient-to-t from-[#006EFF] via-[#00BCFF] to-[#00D9FF] bg-clip-text text-transparent">
         Tickets
       </h1>
@@ -152,9 +187,13 @@ export default function TicketsTable({ isArchived }: TicketsTableProps) {
               <th>Options</th>
             </tr>
           </thead>
+          {/* load tickets from database */}
           {!isLoading && tickets.map((ticket) => (
             <DataTableComponent key={ticket.id} ticket={ticket} /> 
           ))}
+          {/* {ticketData.slice(0,50).map((ticket) => (
+            <DataTableComponent key={ticket.id} ticket={ticket} /> 
+          ))} */}
         </table>
         {isLoading ? (
             <div className="flex pt-5"><LoaderCircle size={32} className=" ml-auto mr-auto animate-spin opacity-65"/></div>
@@ -175,7 +214,9 @@ export default function TicketsTable({ isArchived }: TicketsTableProps) {
             isArchived={isArchived}
           />
         )}
+
       </div>
+      <DataPageButtons/>
     </div>
   );
 }

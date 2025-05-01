@@ -13,17 +13,25 @@ export async function createTicket(data: TicketInput) {
   });
 }
 
-export async function getOpenTickets() {
+export async function getOpenTickets(page = 1, limit = 10) {
+  const skip = (page - 1) * limit;
+
   return prisma.ticket.findMany({
     where: { isArchived: false },
     orderBy: { createdAt: "desc" },
+    take: limit,
+    skip: skip,
   });
 }
 
-export async function getArchivedTickets() {
+export async function getArchivedTickets(page = 1, limit = 10) {
+  const skip = (page - 1) * limit;
+  
   return prisma.ticket.findMany({
     where: { isArchived: true },
     orderBy: { createdAt: "desc" },
+    take: limit,
+    skip: skip,
   });
 }
 
