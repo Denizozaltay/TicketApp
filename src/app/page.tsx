@@ -1,15 +1,17 @@
+import { AuthProvider } from "../lib/auth/AuthContext";
 import { getAuthUser } from "../lib/auth/getAuthUser";
-import AuthWrapper from "./components/AuthWrapper";
-import TicketForm from "./components/TicketPage/TicketForm";
+import TicketForm from "./components/CreateTicketPage/TicketForm";
 
 export default async function HomePage() {
   const user = await getAuthUser();
 
   return (
     <>
-      <AuthWrapper user={user}>
+      <AuthProvider
+        value={{ userId: user?.id, username: user?.username, role: user?.role }}
+      >
         <TicketForm />
-      </AuthWrapper>
+      </AuthProvider>
     </>
   );
 }

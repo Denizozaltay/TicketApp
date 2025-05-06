@@ -8,25 +8,39 @@ datasource db {
 }
 
 model User {
-  id                  String    @id @default(uuid())
-  username            String    @unique
-  email               String    @unique
+  id                  String          @id @default(uuid())
+  username            String          @unique
+  email               String          @unique
   password            String
-  role                String    @default("user")
-  createdAt           DateTime  @default(now())
+  role                String          @default("user")
+  createdAt           DateTime        @default(now())
   tickets             Ticket[]
-  isVerified          Boolean   @default(false)
-  emailVerifyToken    String?   @unique
+  messages            TicketMessage[]
+  isVerified          Boolean         @default(false)
+  emailVerifyToken    String?         @unique
   emailTokenExpiresAt DateTime?
 }
 
 model Ticket {
-  id         String   @id @default(cuid())
+  id         String          @id @default(cuid())
   username   String
   title      String
   content    String
-  createdAt  DateTime @default(now())
+  createdAt  DateTime        @default(now())
   userId     String
-  user       User     @relation(fields: [userId], references: [id])
-  isArchived Boolean  @default(false)
+  user       User            @relation(fields: [userId], references: [id])
+  isArchived Boolean         @default(false)
+  messages   TicketMessage[]
+}
+
+model TicketMessage {
+  id        String   @id @default(uuid())
+  content   String
+  createdAt DateTime @default(now())
+
+  ticket   Ticket @relation(fields: [ticketId], references: [id])
+  ticketId String
+
+  user   User   @relation(fields: [userId], references: [id])
+  userId String
 }
