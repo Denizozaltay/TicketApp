@@ -4,6 +4,7 @@ import Link from "next/link";
 import { roboto } from "@/src/lib/fonts";
 import { Ticket } from "@/src/types/ticket";
 import { useEffect, useState } from "react";
+import { LoaderCircle } from "lucide-react";
 
 export default function MyTicketsTable() {
   const [tickets, setTickets] = useState<Ticket[]>([]);
@@ -55,7 +56,8 @@ export default function MyTicketsTable() {
 
         {isLoading ? (
           <div className="flex justify-center items-center py-12">
-            <div className="animate-spin rounded-full h-10 w-10 border-b-2 border-sky-500"></div>
+          <LoaderCircle
+          className="animate-spin opacity-65"/>
             <span className="ml-3 text-gray-600">Loading tickets...</span>
           </div>
         ) : error ? (

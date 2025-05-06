@@ -3,68 +3,64 @@
 import { useState, useRef, useEffect } from "react";
 import { Send } from "lucide-react";
 import { geistSans } from "@/src/lib/fonts";
-import ChatNavButtons from "../../components/TicketChatPage/ChatNavButtons";
+import { getTicketById } from "@/src/lib/db/models/ticket";
+import {
+  createTicketMessage,
+  getAllMessagesByTicketId,
+} from "@/src/lib/db/models/ticketMessage";
+import { TicketMessage } from "@/src/types/ticketMessage";
+import ChatNavButtons from "@/src/app/components/TicketChatPage/ChatNavButtons";
+import { getAuthUser } from "@/src/lib/auth/getAuthUser";
+import { Ticket } from "@/src/types/ticket";
 
-export default function TicketChatPage({ params }: { params: { id: string } }) {
-  /* ------- DEMO TICKET ------- */
-  const ticket = {
-    id: params.id,
-    title: "Login page issue",
-    description: "Giriş ekranı yenileniyor ve kullanıcıyı atıyor.",
-    username: "denizozaltay",
-    createdAt: "2025-05-06T15:49:00Z",
-    status: "open" as const,
-  };
-  /* ------- DEMO TICKET ------- */
+type Props = {
+  ticket: Ticket;
+  ticketMessages: TicketMessage[];
+  userId: string;
+};
 
-  /* ------- DEMO MESSAGES ------- */
-  type ChatMsg = { id: number; me: boolean; text: string; time: string };
-  const [messages, setMessages] = useState<ChatMsg[]>([
-    {
-      id: 1,
-      me: false,
-      text: "Merhaba! Sorununuzu detaylandırabilir misiniz?",
-      time: "18:50",
-    },
-    {
-      id: 2,
-      me: true,
-      text: "Giriş ekranı sürekli yenileniyor.",
-      time: "18:51",
-    },
-  ]);
-    /* ------- DEMO MESSAGES ------- */
-
+export default function TicketChat({ ticket, ticketMessages, userId }: Props) {
+  const [messages, setMessages] = useState<TicketMessage[]>(ticketMessages);
 
   const [input, setInput] = useState("");
   const listRef = useRef<HTMLUListElement>(null);
 
-  function sendMessage() {
+  async function sendMessage() {
     if (!input.trim()) return;
-    const now = new Date();
-    setMessages((prev) => [
-      ...prev,
-      {
-        id: Date.now(),
-        me: false,
-        text: input.trim(),
-        time: now.toLocaleTimeString("tr-TR", {
-          hour: "2-digit",
-          minute: "2-digit",
-        }),
-      },
-    ]);
-    setInput("");
+
+    const newMessage = {
+      content: input.trim(),
+    };
+
+    try {
+      const response = await fetch(`/api/tickets/${ticket.id}/messages`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(newMessage),
+      });
+
+      if (response.ok) {
+        const createdMessage = await response.json();
+
+        setMessages((prevMessages) => [...prevMessages, createdMessage]);
+        setInput("");
+      } else {
+        console.error("Failed to send message");
+      }
+    } catch (error) {
+      console.error("Error:", error);
+    }
   }
 
   useEffect(() => {
     listRef.current?.scrollTo({ top: listRef.current.scrollHeight });
   }, [messages]);
 
-  const statusClasses =
-    ticket.status === "open"
-      ? "bg-green-50 text-green-700 ring-green-300"
-      : "bg-red-50 text-red-700 ring-red-300";
+  const statusClasses = ticket.isArchived
+    ? "bg-red-50 text-red-700 ring-red-300"
+    : "bg-green-50 text-green-700 ring-green-300";
 
   return (
     <main
@@ -73,8 +69,9 @@ export default function TicketChatPage({ params }: { params: { id: string } }) {
       } flex flex-col items-center min-h-screen bg-gray-50 py-8 px-2`}
     >
       <div className="absolute flex flex-row gap-3 top-4 right-4 z-50">
-             <ChatNavButtons/>
+        <ChatNavButtons />
       </div>
+
       <h1 className="text-[3rem] text-center font-bold bg-gradient-to-t from-[#006EFF] via-[#00BCFF] to-[#00D9FF] bg-clip-text text-transparent">
         Ticket #{ticket.id}
       </h1>
@@ -90,12 +87,10 @@ export default function TicketChatPage({ params }: { params: { id: string } }) {
           <TicketDetail label="Username" value={ticket.username} />
           <TicketDetail
             label="Date"
-            value={new Date(ticket.createdAt).toLocaleString("tr-TR", {
-              day: "2-digit",
+            value={new Date(ticket.createdAt).toLocaleTimeString("tr-TR", {
+              year: "2-digit",
               month: "2-digit",
-              year: "numeric",
-              hour: "2-digit",
-              minute: "2-digit",
+              day: "2-digit",
             })}
           />
           <TicketDetail
@@ -104,7 +99,7 @@ export default function TicketChatPage({ params }: { params: { id: string } }) {
               <span
                 className={`px-4 py-1 rounded-full text-xs font-medium ring-1 inline-block ${statusClasses}`}
               >
-                {ticket.status}
+                {ticket.isArchived ? "Closed" : "Open"}
               </span>
             }
           />
@@ -112,7 +107,7 @@ export default function TicketChatPage({ params }: { params: { id: string } }) {
           <div>
             <p className="font-medium text-gray-700 mb-1">Description:</p>
             <p className="text-gray-600 text-sm whitespace-pre-line">
-              {ticket.description}
+              {ticket.content}
             </p>
           </div>
         </aside>
@@ -127,23 +122,31 @@ export default function TicketChatPage({ params }: { params: { id: string } }) {
             {messages.map((m) => (
               <li
                 key={m.id}
-                className={`flex ${m.me ? "justify-end" : "justify-start"}`}
+                className={`flex ${
+                  userId === m.userId ? "justify-end" : "justify-start"
+                }`}
               >
                 <div
                   className={`break-words whitespace-pre-wrap min-w-50 max-w-xs px-4 py-2 rounded-lg shadow-sm text-sm ${
-                    m.me
+                    userId === m.userId
                       ? "bg-blue-500 text-white rounded-br-none"
                       : "bg-white text-gray-900 ring-1 ring-gray-200 rounded-bl-none"
                   }`}
                 >
                   <div className="flex flex-row pb-1">
                     <p className={`opacity-50`}>
-                      {m.me ? 'Siz' : 'Yetkili'}
+                      {userId === m.userId ? "Siz" : "Yetkili"}
                     </p>
                   </div>
-                  <p>{m.text}</p>
+                  <p>{m.content}</p>
                   <span className="block text-[10px] mt-1 opacity-70 text-right">
-                    {m.time}
+                    <span className="hidden">
+                      {new Date(m.createdAt).toLocaleDateString("tr-TR")}
+                    </span>{" "}
+                    {new Date(m.createdAt).toLocaleTimeString("tr-TR", {
+                      hour: "2-digit",
+                      minute: "2-digit",
+                    })}
                   </span>
                 </div>
               </li>
@@ -181,7 +184,13 @@ export default function TicketChatPage({ params }: { params: { id: string } }) {
 }
 
 /* --- Küçük detay satırı --- */
-function TicketDetail({ label, value }: { label: string; value: React.ReactNode }) {
+function TicketDetail({
+  label,
+  value,
+}: {
+  label: string;
+  value: React.ReactNode;
+}) {
   return (
     <p className="text-sm">
       <span className="font-medium text-gray-700">{label}: </span>
