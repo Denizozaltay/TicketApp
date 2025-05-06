@@ -2,18 +2,11 @@ FROM node:23.11.0-slim
 
 WORKDIR /app
 
-RUN apt-get update -y && \
-    apt-get install -y openssl wait-for-it && \
-    apt-get clean && \
-    rm -rf /var/lib/apt/lists/*
-
 COPY package*.json ./
 RUN npm install
 
-COPY entrypoint.sh /app/
-RUN chmod +x /app/entrypoint.sh && \
-    sed -i 's/\r$//' /app/entrypoint.sh
+COPY . .
 
 EXPOSE 3000
 
-CMD ["/bin/bash", "/app/entrypoint.sh"]
+CMD ["npm", "run", "dev:docker"]
