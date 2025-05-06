@@ -1,4 +1,4 @@
-import RegisterForm from "../../components/RegisterPage/RegisterForm";
+import RegisterForm from "@/src/app/components/RegisterPage/RegisterForm";
 
 export default async function RegisterPage() {
   return (

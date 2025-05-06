@@ -108,7 +108,7 @@ export default function LoginForm() {
 
         <div className="flex flex-row justify-between text-sm opacity-70">
           <p>Don’t have an account?</p>
-          <Link href="/register" className="underline">
+          <Link href="/auth/register" className="underline">
             Sign Up
           </Link>
         </div>

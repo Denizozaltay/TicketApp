@@ -56,22 +56,22 @@ export default function MyTicketsTable() {
         {isLoading ? (
           <div className="flex justify-center items-center py-12">
             <div className="animate-spin rounded-full h-10 w-10 border-b-2 border-sky-500"></div>
-            <span className="ml-3 text-gray-600">Biletler yükleniyor...</span>
+            <span className="ml-3 text-gray-600">Loading tickets...</span>
           </div>
         ) : error ? (
           <div className="py-12 px-8 text-center">
-            <div className="text-red-500 mb-2">⚠️ Hata</div>
+            <div className="text-red-500 mb-2">Error</div>
             <p className="text-gray-600">{error}</p>
             <button
               onClick={() => fetchUserTickets()}
               className="mt-4 px-4 py-2 bg-sky-500 text-white rounded-md hover:bg-sky-600 transition-colors"
             >
-              Yeniden Dene
+              Try again
             </button>
           </div>
         ) : tickets.length === 0 ? (
           <div className="py-12 px-8 text-center text-gray-500">
-            <p>Henüz bilet bulunmamaktadır.</p>
+            <p>No tickets found.</p>
           </div>
         ) : (
           <ul className="divide-y divide-gray-100">

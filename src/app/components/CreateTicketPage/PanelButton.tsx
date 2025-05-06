@@ -1,6 +1,6 @@
 "use client";
 
-import { LogIn, Monitor, UserRound } from "lucide-react";
+import { Monitor } from "lucide-react";
 import { useRouter } from "next/navigation";
 
 export default function PanelButton() {
@@ -12,8 +12,8 @@ export default function PanelButton() {
         onClick={() => router.push("/admin")}
         className="cursor-pointer flex flex-row items-center gap-1 text-s text-purple-600 border border-purple-600 px-3 py-1 rounded hover:bg-purple-600 hover:text-white transition"
       >
-        <Monitor
-        size={14}/>Panel
+        <Monitor size={14} />
+        Panel
       </button>
     </div>
   );

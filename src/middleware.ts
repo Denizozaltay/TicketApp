@@ -7,7 +7,7 @@ export async function middleware(req: NextRequest) {
   const user = await getAuthUser();
 
   // Giriş yapmış kullanıcı login/register sayfasına gitmesin
-  const authPages = ["/login", "/register"];
+  const authPages = ["/auth/login", "/auth/register"];
   if (authPages.some((path) => pathname.startsWith(path))) {
     if (user) {
       return NextResponse.redirect(new URL("/", req.url));
@@ -30,7 +30,7 @@ export async function middleware(req: NextRequest) {
 
   // Sayfa için yetki kontrolü
   if (!user) {
-    return NextResponse.redirect(new URL("/login", req.url));
+    return NextResponse.redirect(new URL("/auth/login", req.url));
   }
 
   // Admin sayfası için role kontrolü
@@ -42,5 +42,5 @@ export async function middleware(req: NextRequest) {
 }
 
 export const config = {
-  matcher: ["/api/:path*", "/admin", "/login", "/register"],
+  matcher: ["/api/:path*", "/admin", "/auth/login", "/auth/register"],
 };

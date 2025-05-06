@@ -9,18 +9,17 @@ export default function AuthButtons() {
   return (
     <div className="flex gap-2">
       <button
-        onClick={() => router.push("/login")}
+        onClick={() => router.push("/auth/login")}
         className="cursor-pointer flex flex-row items-center gap-1 text-s text-blue-500 border border-blue-500 px-3 py-1 rounded hover:bg-blue-500 hover:text-white transition"
       >
-        <LogIn
-        size={14}/>Login
+        <LogIn size={14} />
+        Login
       </button>
       <button
-        onClick={() => router.push("/register")}
+        onClick={() => router.push("/auth/register")}
         className="cursor-pointer flex flex-row items-center gap-1 text-s text-green-500 border border-green-500 px-3 py-1 rounded hover:bg-green-500 hover:text-white transition"
       >
-        <UserRound
-        size={14}/> Register
+        <UserRound size={14} /> Register
       </button>
     </div>
   );
