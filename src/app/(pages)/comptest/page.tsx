@@ -3,7 +3,7 @@
 import { useState, useRef, useEffect } from "react";
 import { Send } from "lucide-react";
 import { geistSans } from "@/src/lib/fonts";
-import ChatNavButtons from "../../components/TicketChatPage/ChatNavButtons";
+import ChatNavButtons from "../../components/TicketChatPage/MyTicketsButton";
 
 export default function TicketChatPage({ params }: { params: { id: string } }) {
   /* ------- DEMO TICKET ------- */
@@ -33,8 +33,7 @@ export default function TicketChatPage({ params }: { params: { id: string } }) {
       time: "18:51",
     },
   ]);
-    /* ------- DEMO MESSAGES ------- */
-
+  /* ------- DEMO MESSAGES ------- */
 
   const [input, setInput] = useState("");
   const listRef = useRef<HTMLUListElement>(null);
@@ -73,7 +72,7 @@ export default function TicketChatPage({ params }: { params: { id: string } }) {
       } flex flex-col items-center min-h-screen bg-gray-50 py-8 px-2`}
     >
       <div className="absolute flex flex-row gap-3 top-4 right-4 z-50">
-             <ChatNavButtons/>
+        <ChatNavButtons />
       </div>
       <h1 className="text-[3rem] text-center font-bold bg-gradient-to-t from-[#006EFF] via-[#00BCFF] to-[#00D9FF] bg-clip-text text-transparent">
         Ticket #{ticket.id}
@@ -137,9 +136,7 @@ export default function TicketChatPage({ params }: { params: { id: string } }) {
                   }`}
                 >
                   <div className="flex flex-row pb-1">
-                    <p className={`opacity-50`}>
-                      {m.me ? 'Siz' : 'Yetkili'}
-                    </p>
+                    <p className={`opacity-50`}>{m.me ? "Siz" : "Yetkili"}</p>
                   </div>
                   <p>{m.text}</p>
                   <span className="block text-[10px] mt-1 opacity-70 text-right">
@@ -181,7 +178,13 @@ export default function TicketChatPage({ params }: { params: { id: string } }) {
 }
 
 /* --- Küçük detay satırı --- */
-function TicketDetail({ label, value }: { label: string; value: React.ReactNode }) {
+function TicketDetail({
+  label,
+  value,
+}: {
+  label: string;
+  value: React.ReactNode;
+}) {
   return (
     <p className="text-sm">
       <span className="font-medium text-gray-700">{label}: </span>
