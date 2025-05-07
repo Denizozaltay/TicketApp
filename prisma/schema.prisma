@@ -18,7 +18,9 @@ model User {
   messages            TicketMessage[]
   isVerified          Boolean         @default(false)
   emailVerifyToken    String?         @unique
-  emailTokenExpiresAt DateTime?
+  emailTokenExpiresAt DateTime?       
+  passwordVerifyToken String?         @unique
+  passwordVerifyTokenExpiresAt DateTime?
 }
 
 model Ticket {
