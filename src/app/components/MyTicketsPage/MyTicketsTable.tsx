@@ -4,7 +4,7 @@ import Link from "next/link";
 import { roboto } from "@/src/lib/fonts";
 import { Ticket } from "@/src/types/ticket";
 import { useEffect, useState } from "react";
-import { LoaderCircle } from "lucide-react";
+import { ChevronLeft, LoaderCircle } from "lucide-react";
 
 export default function MyTicketsTable() {
   const [tickets, setTickets] = useState<Ticket[]>([]);
@@ -43,6 +43,16 @@ export default function MyTicketsTable() {
         roboto?.className ?? ""
       } flex flex-col items-center min-h-screen bg-gray-50 py-14 px-4`}
     >
+      <div className="absolute flex flex-row gap-3 top-4 right-4 z-50">
+        <Link href={"/"}>
+          <div className="flex gap-2">
+            <button className="cursor-pointer flex flex-row items-center gap-1 text-s text-red-500 border border-red-500 px-3 py-1 rounded hover:bg-red-500 hover:text-white transition">
+              <ChevronLeft size={14}/>
+              Go Back
+            </button>
+          </div>
+        </Link>
+      </div>
       <h1 className="text-[4rem] font-bold text-center bg-gradient-to-b from-[#006EFF] via-[#00BCFF] to-[#00D9FF] bg-clip-text text-transparent drop-shadow-sm mb-12">
         Your Tickets
       </h1>
