@@ -4,8 +4,8 @@ import { useState, useRef, useEffect } from "react";
 import { Send } from "lucide-react";
 import { geistSans } from "@/src/lib/fonts";
 import { TicketMessage } from "@/src/types/ticketMessage";
-import ChatNavButtons from "@/src/app/components/CreateTicketPage/MyTicketsButton";
 import { Ticket } from "@/src/types/ticket";
+import MyTicketsButton from "../CreateTicketPage/MyTicketsButton";
 
 type Props = {
   ticket: Ticket;
@@ -63,7 +63,7 @@ export default function TicketChat({ ticket, ticketMessages, userId }: Props) {
       } flex flex-col items-center min-h-screen bg-gray-50 py-8 px-2`}
     >
       <div className="absolute flex flex-row gap-3 top-4 right-4 z-50">
-        <ChatNavButtons />
+        <MyTicketsButton/>
       </div>
 
       <h1 className="text-[3rem] text-center font-bold bg-gradient-to-t from-[#006EFF] via-[#00BCFF] to-[#00D9FF] bg-clip-text text-transparent">

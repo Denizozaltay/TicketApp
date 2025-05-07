@@ -80,6 +80,7 @@ export default function MyTicketsTable() {
           <ul className="divide-y divide-gray-100">
             {tickets.map((ticket) => (
               <TicketRow
+                key={ticket.id}
                 ticket={ticket}
               />
             ))}
