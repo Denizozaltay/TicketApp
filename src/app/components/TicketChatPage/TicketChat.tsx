@@ -9,7 +9,7 @@ import {
   getAllMessagesByTicketId,
 } from "@/src/lib/db/models/ticketMessage";
 import { TicketMessage } from "@/src/types/ticketMessage";
-import ChatNavButtons from "@/src/app/components/TicketChatPage/MyTicketsButton";
+import ChatNavButtons from "@/src/app/components/CreateTicketPage/MyTicketsButton";
 import { getAuthUser } from "@/src/lib/auth/getAuthUser";
 import { Ticket } from "@/src/types/ticket";
 

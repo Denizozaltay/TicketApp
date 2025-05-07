@@ -8,7 +8,7 @@ import LogoutButton from "./LogoutButton";
 import { useAuth } from "@/src/lib/auth/AuthContext";
 import AuthButtons from "./AuthButtons";
 import PanelButton from "./PanelButton";
-import MyTicketsButton from "../TicketChatPage/MyTicketsButton";
+import MyTicketsButton from "./MyTicketsButton";
 
 export default function TicketForm() {
   const { userId, role } = useAuth();

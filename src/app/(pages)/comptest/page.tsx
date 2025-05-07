@@ -3,7 +3,7 @@
 import { useState, useRef, useEffect } from "react";
 import { Send } from "lucide-react";
 import { geistSans } from "@/src/lib/fonts";
-import ChatNavButtons from "../../components/TicketChatPage/MyTicketsButton";
+import ChatNavButtons from "../../components/CreateTicketPage/MyTicketsButton";
 
 export default function TicketChatPage({ params }: { params: { id: string } }) {
   /* ------- DEMO TICKET ------- */
