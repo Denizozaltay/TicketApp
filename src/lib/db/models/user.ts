@@ -38,3 +38,6 @@ export async function verifyUserEmail(token: string) {
 
   return updatedUser;
 }
+
+
+

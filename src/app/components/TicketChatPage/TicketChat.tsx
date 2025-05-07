@@ -3,14 +3,8 @@
 import { useState, useRef, useEffect } from "react";
 import { Send } from "lucide-react";
 import { geistSans } from "@/src/lib/fonts";
-import { getTicketById } from "@/src/lib/db/models/ticket";
-import {
-  createTicketMessage,
-  getAllMessagesByTicketId,
-} from "@/src/lib/db/models/ticketMessage";
 import { TicketMessage } from "@/src/types/ticketMessage";
 import ChatNavButtons from "@/src/app/components/TicketChatPage/ChatNavButtons";
-import { getAuthUser } from "@/src/lib/auth/getAuthUser";
 import { Ticket } from "@/src/types/ticket";
 
 type Props = {
@@ -106,7 +100,7 @@ export default function TicketChat({ ticket, ticketMessages, userId }: Props) {
 
           <div>
             <p className="font-medium text-gray-700 mb-1">Description:</p>
-            <p className="text-gray-600 text-sm whitespace-pre-line">
+            <p className="break-words whitespace-pre-wrap text-justify text-gray-600 text-sm">
               {ticket.content}
             </p>
           </div>

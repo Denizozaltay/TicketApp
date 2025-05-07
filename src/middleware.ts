@@ -15,6 +15,14 @@ export async function middleware(req: NextRequest) {
     return NextResponse.next();
   }
 
+  // Giris yapmamis kullanicilar tickets ve myticket sayfasina gitmesin
+  const ticketPages = ['/my-tickets', '/tickets'];
+  if(ticketPages.some((path) => pathname.startsWith(path))) {
+    if(!user) {
+      return NextResponse.redirect(new URL("/", req.url))
+    }
+  }
+
   // API login/register yolları public
   if (pathname.startsWith("/api/auth/")) {
     return NextResponse.next();
@@ -42,5 +50,5 @@ export async function middleware(req: NextRequest) {
 }
 
 export const config = {
-  matcher: ["/api/:path*", "/admin", "/auth/login", "/auth/register"],
+  matcher: ["/api/:path*", "/admin", "/auth/login", "/auth/register", "/my-tickets/:path*", "/tickets/:path*"],
 };

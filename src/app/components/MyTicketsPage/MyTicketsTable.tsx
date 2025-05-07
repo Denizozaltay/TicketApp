@@ -8,8 +8,9 @@ import { LoaderCircle } from "lucide-react";
 
 export default function MyTicketsTable() {
   const [tickets, setTickets] = useState<Ticket[]>([]);
-  const [isLoading, setIsLoading] = useState(true);
+  const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
+
 
   useEffect(() => {
     fetchUserTickets();
@@ -78,40 +79,49 @@ export default function MyTicketsTable() {
         ) : (
           <ul className="divide-y divide-gray-100">
             {tickets.map((ticket) => (
-              <li key={ticket.id}>
-                <Link
-                  href={`/tickets/${ticket.id}`}
-                  className="grid grid-cols-4 gap-4 items-center px-8 py-4 hover:bg-gray-100 transition-colors"
-                >
-                  <span className="truncate font-medium text-gray-800">
-                    {ticket.id}
-                  </span>
-                  <span className="text-gray-600">{ticket.title}</span>
-                  <span className="text-gray-500">
-                    {new Date(ticket.createdAt).toLocaleDateString("tr-TR")}{" "}
-                    {new Date(ticket.createdAt).toLocaleTimeString("tr-TR", {
-                      hour: "2-digit",
-                      minute: "2-digit",
-                    })}
-                  </span>
-
-                  <span className="mx-auto">
-                    <span
-                      className={`px-4 py-1 rounded-full text-xs font-medium ring-1 ${
-                        ticket.isArchived === false
-                          ? "bg-green-50 text-green-700 ring-green-300"
-                          : "bg-red-50 text-red-700 ring-red-300"
-                      }`}
-                    >
-                      {ticket.isArchived === false ? "open" : "closed"}
-                    </span>
-                  </span>
-                </Link>
-              </li>
+              <TicketRow
+                ticket={ticket}
+              />
             ))}
           </ul>
         )}
       </div>
     </main>
   );
+}
+
+
+function TicketRow({ ticket }: { ticket: Ticket }) {
+  return (
+    <li key={ticket.id}>
+    <Link
+      href={`/tickets/${ticket.id}`}
+      className="grid grid-cols-4 gap-4 items-center px-8 py-4 hover:bg-gray-100 transition-colors"
+    >
+      <span className="truncate font-medium text-gray-800">
+        {ticket.id}
+      </span>
+      <span className="text-gray-600 overflow-hidden truncate">{ticket.title}</span>
+      <span className="text-gray-500 overflow-hidden">
+        {new Date(ticket.createdAt).toLocaleDateString("tr-TR")}{" "}
+        {new Date(ticket.createdAt).toLocaleTimeString("tr-TR", {
+          hour: "2-digit",
+          minute: "2-digit",
+        })}
+      </span>
+
+      <span className="mx-auto">
+        <span
+          className={`px-4 py-1 rounded-full text-xs font-medium ring-1 ${
+            ticket.isArchived === false
+              ? "bg-green-50 text-green-700 ring-green-300"
+              : "bg-red-50 text-red-700 ring-red-300"
+          }`}
+        >
+          {ticket.isArchived === false ? "open" : "closed"}
+        </span>
+      </span>
+    </Link>
+  </li>
+  )
 }

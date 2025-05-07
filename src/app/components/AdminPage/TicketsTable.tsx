@@ -5,6 +5,8 @@ import { useEffect, useState } from "react";
 import DataTableButton from "./TicketTableButton";
 import TicketModal from "./TicketModal";
 import { ArrowBigLeft, ArrowBigRight, LoaderCircle } from "lucide-react";
+import { useRouter } from "next/navigation";
+
 
 type TicketsTableProps = {
   isArchived: boolean;
@@ -17,12 +19,15 @@ export default function TicketsTable({ isArchived }: TicketsTableProps) {
   const [page, setPage] = useState(1);
   const limit = 10;
 
+
+  const router = useRouter();
+
   function nextPage() {
     setPage((prev) => prev + 1);
   }
 
   function previousPage() {
-    setPage((prev) => prev + -1);
+    setPage((prev) => prev - 1);
   }
 
   const [isLoading, setIsLoading] = useState(false);
@@ -35,6 +40,11 @@ export default function TicketsTable({ isArchived }: TicketsTableProps) {
   function closeModal() {
     setSelectedTicket(null);
     setIsModalOpen(false);
+  }
+
+
+  function navigateChat(id: string) {
+    router.push(`/tickets/${id}`);
   }
 
   async function fetchTickets() {
@@ -143,7 +153,6 @@ export default function TicketsTable({ isArchived }: TicketsTableProps) {
         console.error("Error deleting ticket:", error);
       });
   }
-
   function archiveTicket(id: string): void {
     fetch(`/api/tickets/${id}/archive`, { method: "PATCH" })
       .then((response) => {
@@ -219,6 +228,7 @@ export default function TicketsTable({ isArchived }: TicketsTableProps) {
                 archiveTicket(id);
               }
             }}
+            onSeeChat={navigateChat}
             isArchived={isArchived}
           />
         )}

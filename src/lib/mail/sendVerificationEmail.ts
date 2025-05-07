@@ -1,7 +1,8 @@
+import { PublicUser } from "@/src/types/user";
 import { transporter } from "./transporter";
-import type { User } from "@prisma/client";
 
-export async function sendVerificationEmail(user: User, token: string) {
+
+export async function sendVerificationEmail(user: PublicUser, token: string) {
   const confirmUrl = `${process.env.BASE_URL}/verify-email?token=${token}`;
 
   await transporter.sendMail({

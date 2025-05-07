@@ -39,6 +39,8 @@ export default async function TicketChatPage({ params: {id} }: Props) {
         userId={user.id}
         />
       </AuthProvider>
+    ) : !user ? (
+      <p>not logged in</p>
     ) : (
       <p>Loading...</p>
     )}

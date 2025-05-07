@@ -4,7 +4,9 @@ import { Ticket } from "@/src/types/ticket";
 import { X } from "lucide-react";
 import DataTableButton from "./TicketTableButton";
 
+
 function DataBlock({ title, data }: { title: string; data: string }) {
+
   return (
     <div className="datablockpopup flex flex-1 flex-col">
       <h1 className="font-medium text-[22px] antialiased">{title}</h1>
@@ -18,6 +20,7 @@ type TicketModalProps = {
   onClose: () => void;
   onDelete: (id: string) => void;
   onArchiveToggle: (id: string, isArchived: boolean) => void;
+  onSeeChat: (id: string) => void;
   isArchived: boolean;
 };
 
@@ -26,9 +29,11 @@ export default function TicketModal({
   onClose,
   onDelete,
   onArchiveToggle,
+  onSeeChat,
   isArchived,
 }: TicketModalProps) {
   if (!ticket) return null;
+
 
   return (
     <div className="fixed inset-0 bg-black/35 flex justify-center items-center z-50">
@@ -79,6 +84,14 @@ export default function TicketModal({
                   onClose();
                 }}
                 className="archive-btn"
+              />
+              <DataTableButton
+                name="See Chat"
+                onClick={() => {
+                  onSeeChat(ticket.id)
+                  onClose();
+                }}
+                className="seechat-btn"
               />
             </div>
           </div>
