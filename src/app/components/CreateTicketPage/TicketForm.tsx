@@ -8,7 +8,7 @@ import LogoutButton from "./LogoutButton";
 import { useAuth } from "@/src/lib/auth/AuthContext";
 import AuthButtons from "./AuthButtons";
 import PanelButton from "./PanelButton";
-import ChatNavButtons from "../TicketChatPage/ChatNavButtons";
+import MyTicketsButton from "./MyTicketsButton";
 
 export default function TicketForm() {
   const { userId, role } = useAuth();
@@ -19,10 +19,9 @@ export default function TicketForm() {
     <main className={`${roboto.className} relative h-screen bg-gray-50`}>
       <div className="absolute flex flex-row gap-3 top-4 right-4 z-50">
         {userId ? <LogoutButton /> : <AuthButtons />}
-        {role === 'admin' ? <PanelButton/> : null}
-        <ChatNavButtons />
+        {role === "admin" ? <PanelButton /> : null}
+        {userId ? <MyTicketsButton /> : null}
       </div>
-
 
       <div className="flex flex-col items-center justify-center h-screen w-screen px-4 gap-12 pt-10">
         {!isSuccess && (

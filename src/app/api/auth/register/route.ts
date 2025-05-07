@@ -38,7 +38,11 @@ export async function POST(req: NextRequest) {
       emailTokenExpiresAt,
     });
 
-    await sendVerificationEmail(newUser, emailVerifyToken);
+    await sendVerificationEmail(
+      newUser.username,
+      newUser.email,
+      emailVerifyToken
+    );
 
     return NextResponse.json(
       {

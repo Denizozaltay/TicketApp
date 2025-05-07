@@ -4,7 +4,7 @@ import { useState, useRef, useEffect } from "react";
 import { Send } from "lucide-react";
 import { geistSans } from "@/src/lib/fonts";
 import { TicketMessage } from "@/src/types/ticketMessage";
-import ChatNavButtons from "@/src/app/components/TicketChatPage/ChatNavButtons";
+import ChatNavButtons from "@/src/app/components/CreateTicketPage/MyTicketsButton";
 import { Ticket } from "@/src/types/ticket";
 
 type Props = {
