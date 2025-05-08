@@ -17,11 +17,11 @@ export default function RegisterForm() {
   const [password, setPassword] = useState("");
   const [password2, setPassword2] = useState("");
   const [error, setError] = useState("");
+  const [success, setSuccess] = useState("");
 
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
     setIsLoading(true);
-
     if (password !== password2) {
       setError("Passwords must be the same.");
       setIsLoading(false);
@@ -39,21 +39,30 @@ export default function RegisterForm() {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ username, email, password }),
+        
       });
-
+      
       if (!res.ok) {
         const data = await res.json();
         setError(data.message || "Registration failed.");
         setIsLoading(false);
         return;
       }
+      // if successful, send user show this message and
+      setSuccess("Verify your email and you can login! Redirecting...")
+      setError("")
+      
+      // Redirect to login page after 3 seconds
+      setTimeout(() => {
+        router.push("/auth/login"); 
+      }, 3000);
 
-      setError("");
-      router.push("/auth/login");
     } catch (err) {
       console.error("Register error:", err);
       setError("Something went wrong. Please try again.");
       setIsLoading(false);
+    } finally {
+      setIsLoading(true);
     }
   }
 
@@ -109,7 +118,7 @@ export default function RegisterForm() {
           </div>
 
           {error && <p className="text-red-500 text-sm">{error}</p>}
-
+          {success && <p className="text-green-700 text-sm">{success}</p>}
           <Button
             type="submit"
             className="font-medium cursor-pointer"
@@ -119,7 +128,7 @@ export default function RegisterForm() {
               <LoaderCircle className="mr-2 h-4 w-4 animate-spin" />
             ) : (
               <LogIn className="mr-2 h-4 w-4" />
-            )}{" "}
+            )}
             Register
           </Button>
         </form>

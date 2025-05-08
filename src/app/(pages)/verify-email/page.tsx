@@ -1,8 +1,14 @@
 import { verifyUserEmail } from "@/src/lib/db/models/user";
 import { redirect } from "next/navigation";
 
+type Props = {
+  searchParams: { token?: string };
+};
 
-export default async function VerifyEmailPage({ token }: { token: string }) {
+export default async function VerifyEmailPage({ searchParams }: Props) {
+  const param = await searchParams;
+  const token = param.token;
+
 
   if (!token) {
     redirect("/");

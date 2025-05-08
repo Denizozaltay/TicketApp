@@ -15,17 +15,14 @@ export async function middleware(req: NextRequest) {
     return NextResponse.next();
   }
 
-  // Giris yapmamis kullanicilar tickets ve myticket sayfasina gitmesin
-  const ticketPages = ['/my-tickets', '/tickets'];
-  if(ticketPages.some((path) => pathname.startsWith(path))) {
-    if(!user) {
-      return NextResponse.redirect(new URL("/", req.url))
-    }
-  }
-
   // API login/register yolları public
   if (pathname.startsWith("/api/auth/")) {
     return NextResponse.next();
+  }
+
+  // Sayfa için yetki kontrolü
+  if (!user) {
+    return NextResponse.redirect(new URL("/auth/login", req.url));
   }
 
   // Tüm API yolları için yetki kontrolü
@@ -36,10 +33,22 @@ export async function middleware(req: NextRequest) {
     return NextResponse.next();
   }
 
-  // Sayfa için yetki kontrolü
-  if (!user) {
-    return NextResponse.redirect(new URL("/auth/login", req.url));
+
+  const ticketPages = ['/my-tickets', '/tickets'];
+
+  // adminler istedigi ticketa gidebilir
+  if(user.role === "admin")
+  {
+    return NextResponse.next();
   }
+
+// Giris yapmamis kullanicilar tickets ve myticket sayfasina gitmesin
+  if(ticketPages.some((path) => pathname.startsWith(path))) {
+    if(!user) {
+      return NextResponse.redirect(new URL("/", req.url))
+    }
+  }
+
 
   // Admin sayfası için role kontrolü
   if (pathname.startsWith("/admin") && user.role !== "admin") {
