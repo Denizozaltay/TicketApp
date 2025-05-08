@@ -23,6 +23,8 @@ export interface UserRecord {
   isVerified: boolean;
   emailVerifyToken: string | null;
   emailTokenExpiresAt: Date | null;
+  passwordVerifyToken: string | null;
+  passwordVerifyTokenExpiresAt: Date | null;
 }
 
 export interface PublicUser {
