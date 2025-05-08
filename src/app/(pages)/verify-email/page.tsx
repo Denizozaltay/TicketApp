@@ -9,7 +9,6 @@ export default async function VerifyEmailPage({ searchParams }: Props) {
   const param = await searchParams;
   const token = param.token;
 
-
   if (!token) {
     redirect("/");
   }
