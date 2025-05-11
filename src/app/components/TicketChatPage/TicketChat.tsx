@@ -8,16 +8,45 @@ import { Ticket } from "@/src/types/ticket";
 import MyTicketsButton from "../CreateTicketPage/MyTicketsButton";
 
 type Props = {
-  ticket: Ticket;
-  ticketMessages: TicketMessage[];
+  ticketId: string;
   userId: string;
 };
 
-export default function TicketChat({ ticket, ticketMessages, userId }: Props) {
-  const [messages, setMessages] = useState<TicketMessage[]>(ticketMessages);
-
+export default function TicketChat({ ticketId, userId }: Props) {
+  const [messages, setMessages] = useState<TicketMessage[]>([]);
+  const [ticket, setTicket] = useState<Ticket | null>(null);
+  const [loading, setLoading] = useState(true);
   const [input, setInput] = useState("");
   const listRef = useRef<HTMLUListElement>(null);
+
+  // Ticket ve mesaj verilerini client tarafında çek
+  useEffect(() => {
+    async function fetchTicketData() {
+      try {
+        setLoading(true);
+        // Ticket verilerini çek
+        const ticketResponse = await fetch(`/api/tickets/${ticketId}`);
+        if (!ticketResponse.ok) throw new Error("Failed to fetch ticket");
+        const ticketData = await ticketResponse.json();
+
+        // Mesaj verilerini çek
+        const messagesResponse = await fetch(
+          `/api/tickets/${ticketId}/messages`
+        );
+        if (!messagesResponse.ok) throw new Error("Failed to fetch messages");
+        const messagesData = await messagesResponse.json();
+
+        setTicket(ticketData);
+        setMessages(messagesData);
+      } catch (error) {
+        console.error("Error fetching data:", error);
+      } finally {
+        setLoading(false);
+      }
+    }
+
+    fetchTicketData();
+  }, [ticketId]);
 
   async function sendMessage() {
     if (!input.trim()) return;
@@ -27,7 +56,7 @@ export default function TicketChat({ ticket, ticketMessages, userId }: Props) {
     };
 
     try {
-      const response = await fetch(`/api/tickets/${ticket.id}/messages`, {
+      const response = await fetch(`/api/tickets/${ticketId}/messages`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -52,6 +81,15 @@ export default function TicketChat({ ticket, ticketMessages, userId }: Props) {
     listRef.current?.scrollTo({ top: listRef.current.scrollHeight });
   }, [messages]);
 
+  // Veri yüklenene kadar yükleniyor göster
+  if (loading || !ticket) {
+    return (
+      <div className="flex justify-center items-center min-h-screen">
+        <p className="text-xl">Loading...</p>
+      </div>
+    );
+  }
+
   const statusClasses = ticket.isArchived
     ? "bg-red-50 text-red-700 ring-red-300"
     : "bg-green-50 text-green-700 ring-green-300";
@@ -63,7 +101,7 @@ export default function TicketChat({ ticket, ticketMessages, userId }: Props) {
       } flex flex-col items-center min-h-screen bg-gray-50 py-8 px-2`}
     >
       <div className="absolute flex flex-row gap-3 top-4 right-4 z-50">
-        <MyTicketsButton/>
+        <MyTicketsButton />
       </div>
 
       <h1 className="text-[3rem] text-center font-bold bg-gradient-to-t from-[#006EFF] via-[#00BCFF] to-[#00D9FF] bg-clip-text text-transparent">
