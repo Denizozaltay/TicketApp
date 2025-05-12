@@ -16,7 +16,7 @@ export default async function TicketChatPage({ params }: Props) {
         <AuthProvider
           value={{ userId: user.id, username: user.username, role: user.role }}
         >
-          <TicketChat ticketId={id} userId={user.id} />
+          <TicketChat ticketId={id} userId={user.id} role={user.role} />
         </AuthProvider>
       ) : (
         <p>not logged in</p>

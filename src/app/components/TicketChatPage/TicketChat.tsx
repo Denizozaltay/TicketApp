@@ -10,9 +10,10 @@ import MyTicketsButton from "../CreateTicketPage/MyTicketsButton";
 type Props = {
   ticketId: string;
   userId: string;
+  role: "user" | "admin";
 };
 
-export default function TicketChat({ ticketId, userId }: Props) {
+export default function TicketChat({ ticketId, userId, role }: Props) {
   const [messages, setMessages] = useState<TicketMessage[]>([]);
   const [ticket, setTicket] = useState<Ticket | null>(null);
   const [loading, setLoading] = useState(true);
@@ -151,31 +152,35 @@ export default function TicketChat({ ticketId, userId }: Props) {
             ref={listRef}
             className="flex-1 overflow-y-auto h-full px-6 py-6 space-y-4 bg-gray-50"
           >
-            {messages.map((m) => (
+            {messages.map((message) => (
               <li
-                key={m.id}
+                key={message.id}
                 className={`flex ${
-                  userId === m.userId ? "justify-end" : "justify-start"
+                  userId === message.userId ? "justify-end" : "justify-start"
                 }`}
               >
                 <div
                   className={`break-words whitespace-pre-wrap min-w-50 max-w-xs px-4 py-2 rounded-lg shadow-sm text-sm ${
-                    userId === m.userId
+                    userId === message.userId
                       ? "bg-blue-500 text-white rounded-br-none"
                       : "bg-white text-gray-900 ring-1 ring-gray-200 rounded-bl-none"
                   }`}
                 >
                   <div className="flex flex-row pb-1">
                     <p className={`opacity-50`}>
-                      {userId === m.userId ? "Siz" : "Yetkili"}
+                      {userId === message.userId
+                        ? "Siz"
+                        : role === "admin"
+                        ? "Kullanıcı"
+                        : "Yetkili"}
                     </p>
                   </div>
-                  <p>{m.content}</p>
+                  <p>{message.content}</p>
                   <span className="block text-[10px] mt-1 opacity-70 text-right">
                     <span className="hidden">
-                      {new Date(m.createdAt).toLocaleDateString("tr-TR")}
+                      {new Date(message.createdAt).toLocaleDateString("tr-TR")}
                     </span>{" "}
-                    {new Date(m.createdAt).toLocaleTimeString("tr-TR", {
+                    {new Date(message.createdAt).toLocaleTimeString("tr-TR", {
                       hour: "2-digit",
                       minute: "2-digit",
                     })}
