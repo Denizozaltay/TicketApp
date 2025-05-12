@@ -1,29 +1,17 @@
 # Ticket App
 
-Ticket management web application built with Next.js, TypeScript, Tailwind CSS, and Prisma.
-
-## Table of Contents
-
-- [Features](#features)
-- [Tech Stack](#tech-stack)
-- [Prerequisites](#prerequisites)
-- [Getting Started](#getting-started)
-- [Environment Variables](#environment-variables)
-- [Database Setup](#database-setup)
-- [Running the App](#running-the-app)
-- [API Endpoints](#api-endpoints)
-- [Docker Setup](#docker-setup)
-- [Contributing](#contributing)
-- [License](#license)
+Modern and easy-to-use ticket management application. Built with Next.js, TypeScript, and PostgreSQL.
 
 ## Features
 
-- Create new tickets
-- List open tickets
+- User authentication (login, register, email verification)
+- View and manage open tickets
 - Archive and unarchive tickets
-- View archived tickets
+- User-specific ticket listing (my-tickets)
+- Email notifications for ticket updates
+- Admin panel for management
 
-## Tech Stack
+## Technologies
 
 - Next.js 15 (App Router)
 - React 19
@@ -33,110 +21,47 @@ Ticket management web application built with Next.js, TypeScript, Tailwind CSS, 
 - PostgreSQL 17
 - Docker & Docker Compose
 
-## Prerequisites
-
-- Node.js >=16
-- npm or Yarn
-- Docker & Docker Compose (optional for containerized setup)
-
 ## Getting Started
 
 1. Clone the repository:
 
    ```bash
    git clone https://github.com/Denizozaltay/TicketApp.git
-   cd ticket-app
+   cd TicketApp
    ```
 
 2. Install dependencies:
    ```bash
    npm install
-   # or
-   yarn install
    ```
 
 ## Environment Variables
 
-Create a `.env` file in the project root with the following variables:
+Create a `.env` file in the project root:
 
 ```env
-# PostgreSQL database credentials
-POSTGRES_DB_USER=your_username
-POSTGRES_DB_PASSWORD=your_password
-POSTGRES_DB_NAME=your_database
+BASE_URL="http://localhost:3000"
+
+EMAIL_HOST=your_email_host
+EMAIL_USER=your_email_user
+EMAIL_PASSWORD=your_email_password
+
+JWT_SECRET=your_jwt_secret
+
+POSTGRES_DB_USER=your_postgres_db_user
+POSTGRES_DB_PASSWORD=your_postgres_db_password
+POSTGRES_DB_NAME=your_postgres_db_name
 POSTGRES_DB_PORT=5432
 
-# Prisma connection URL
-DATABASE_URL=postgresql://${POSTGRES_DB_USER}:${POSTGRES_DB_PASSWORD}@localhost:${POSTGRES_DB_PORT}/${POSTGRES_DB_NAME}?schema=public
+DATABASE_URL="postgresql://${POSTGRES_DB_USER}:${POSTGRES_DB_PASSWORD}@ticket-db:5432/${POSTGRES_DB_NAME}"
 ```
 
-## Database Setup
+## Running the Application
 
-Run Prisma migrations to create the database schema:
-
-```bash
-npx prisma migrate dev --name init
-```
-
-You can also explore the database with Prisma Studio:
-
-```bash
-npx prisma studio
-```
-
-## Running the App
-
-### Development
-
-```bash
-npm run dev
-# or
- yarn dev
-```
-
-Open `http://localhost:3000` in your browser.
-
-### Production
-
-Build the app:
-
-```bash
-npm run build
-```
-
-Start the production server:
-
-```bash
-npm start
-```
-
-## API Endpoints
-
-The application exposes the following REST API endpoints under `/api/tickets`:
-
-- `GET /api/tickets` - List all open tickets
-- `POST /api/tickets` - Create a new ticket
-- `GET /api/tickets/open` - List open tickets
-- `GET /api/tickets/archived` - List archived tickets
-- `GET /api/tickets/[id]` - Get ticket by ID
-- `PUT /api/tickets/[id]` - Update ticket by ID
-- `POST /api/tickets/[id]/archive` - Archive a ticket
-- `POST /api/tickets/[id]/unarchive` - Unarchive a ticket
-
-## Docker Setup
-
-To run the app with Docker:
+Start the application with Docker:
 
 ```bash
 docker-compose up --build
 ```
 
-This will start both the Next.js app and a PostgreSQL database.
-
-## Contributing
-
-Contributions are welcome! Feel free to open issues or submit pull requests.
-
-## License
-
-This project is licensed under the MIT License. See the LICENSE file for details.
+Open `http://localhost:3000` in your browser.
