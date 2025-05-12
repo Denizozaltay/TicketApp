@@ -203,12 +203,24 @@ export default function TicketChat({ ticketId, userId, role }: Props) {
               rows={1}
               value={input}
               onChange={(e) => setInput(e.target.value)}
-              placeholder="Send a message..."
-              className="flex-1 resize-none border border-gray-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-sky-300"
+              placeholder={
+                ticket.isArchived
+                  ? "Bu ticket kapatılmıştır"
+                  : "Send a message..."
+              }
+              className={`flex-1 resize-none border border-gray-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-sky-300 ${
+                ticket.isArchived ? "bg-gray-100 cursor-not-allowed" : ""
+              }`}
+              disabled={ticket.isArchived}
             />
             <button
               type="submit"
-              className="cursor-pointer shrink-0 flex items-center gap-1 px-4 py-2 bg-sky-500 hover:bg-sky-600 text-white font-medium rounded-lg transition-colors"
+              disabled={ticket.isArchived}
+              className={`cursor-pointer shrink-0 flex items-center gap-1 px-4 py-2 ${
+                ticket.isArchived
+                  ? "bg-gray-400 cursor-not-allowed"
+                  : "bg-sky-500 hover:bg-sky-600"
+              } text-white font-medium rounded-lg transition-colors`}
             >
               <Send size={16} />
               Send
