@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useRef, useEffect } from "react";
-import { Send } from "lucide-react";
+import { Archive, ArchiveX, Send, XCircle } from "lucide-react";
 import { geistSans } from "@/src/lib/fonts";
 import { TicketMessage } from "@/src/types/ticketMessage";
 import { Ticket } from "@/src/types/ticket";
@@ -78,6 +78,44 @@ export default function TicketChat({ ticketId, userId, role }: Props) {
     }
   }
 
+  async function updateTicketStatus(isArchived: boolean) {
+    try {
+      const endpoint = isArchived
+        ? `/api/tickets/${ticketId}/archive`
+        : `/api/tickets/${ticketId}/unarchive`;
+
+      const response = await fetch(endpoint, {
+        method: "PATCH",
+        headers: {
+          "Content-Type": "application/json",
+        },
+      });
+
+      if (response.ok) {
+        const updatedTicket = await response.json();
+        setTicket(updatedTicket);
+      } else {
+        console.error("Failed to update ticket status");
+      }
+    } catch (error) {
+      console.error("Error:", error);
+    }
+  }
+
+  async function endTicket() {
+    if (confirm("Are you sure you want to close this ticket?")) {
+      await updateTicketStatus(true);
+    }
+  }
+
+  async function toggleArchiveStatus() {
+    if (!ticket) {
+      console.error("Ticket not found");
+      return;
+    }
+    await updateTicketStatus(!ticket.isArchived);
+  }
+
   useEffect(() => {
     listRef.current?.scrollTo({ top: listRef.current.scrollHeight });
   }, [messages]);
@@ -143,6 +181,39 @@ export default function TicketChat({ ticketId, userId, role }: Props) {
               {ticket.content}
             </p>
           </div>
+
+          {!ticket.isArchived && role === "user" && (
+            <button
+              onClick={endTicket}
+              className="mt-4 flex items-center justify-center gap-2 px-4 py-2 bg-red-500 hover:bg-red-600 text-white font-medium rounded-lg transition-colors"
+            >
+              <XCircle size={16} />
+              Close Ticket
+            </button>
+          )}
+
+          {role === "admin" && (
+            <button
+              onClick={toggleArchiveStatus}
+              className={`mt-4 flex items-center justify-center gap-2 px-4 py-2 ${
+                ticket.isArchived
+                  ? "bg-green-500 hover:bg-green-600"
+                  : "bg-amber-500 hover:bg-amber-600"
+              } text-white font-medium rounded-lg transition-colors`}
+            >
+              {ticket.isArchived ? (
+                <>
+                  <ArchiveX size={16} />
+                  Unarchive Ticket
+                </>
+              ) : (
+                <>
+                  <Archive size={16} />
+                  Archive Ticket
+                </>
+              )}
+            </button>
+          )}
         </aside>
 
         {/* -------- SAĞ: CHAT -------- */}
@@ -169,10 +240,10 @@ export default function TicketChat({ ticketId, userId, role }: Props) {
                   <div className="flex flex-row pb-1">
                     <p className={`opacity-50`}>
                       {userId === message.userId
-                        ? "Siz"
+                        ? "You"
                         : role === "admin"
-                        ? "Kullanıcı"
-                        : "Yetkili"}
+                        ? "User"
+                        : "Admin"}
                     </p>
                   </div>
                   <p>{message.content}</p>
