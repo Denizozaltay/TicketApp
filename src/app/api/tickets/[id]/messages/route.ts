@@ -5,6 +5,9 @@ import {
   createTicketMessage,
   getAllMessagesByTicketId,
 } from "@/src/lib/db/models/ticketMessage";
+import { sendMessageNotificationEmail } from "@/src/lib/mail/sendMessageNotificationEmail";
+import { getTicketById } from "@/src/lib/db/models/ticket";
+import { getUserById } from "@/src/lib/db/models/user";
 
 export async function GET(
   _req: NextRequest,
@@ -40,6 +43,20 @@ export async function POST(
     ticketId: id,
     userId: user.id,
   });
+
+  if (user.role !== "user") {
+    const ticket = await getTicketById(id);
+    if (ticket) {
+      const ticketOwner = await getUserById(ticket.userId);
+      if (ticketOwner) {
+        await sendMessageNotificationEmail(
+          ticketOwner.username || "User",
+          ticketOwner.email,
+          id
+        );
+      }
+    }
+  }
 
   return NextResponse.json(message, { status: 201 });
 }

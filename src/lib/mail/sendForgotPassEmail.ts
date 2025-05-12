@@ -1,10 +1,6 @@
-import { PublicUser } from "@/src/types/user";
 import { transporter } from "./transporter";
 
-export async function sendForgotPassEmail(
-  email: string,
-  token: string
-) {
+export async function sendForgotPassEmail(email: string, token: string) {
   const confirmUrl = `${process.env.BASE_URL}/changepassword?token=${token}`;
 
   await transporter.sendMail({

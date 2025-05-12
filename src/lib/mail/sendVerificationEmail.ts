@@ -1,4 +1,3 @@
-import { PublicUser } from "@/src/types/user";
 import { transporter } from "./transporter";
 
 export async function sendVerificationEmail(

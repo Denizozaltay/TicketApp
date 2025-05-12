@@ -7,6 +7,12 @@ export async function createUser(input: UserInput) {
   });
 }
 
+export async function getUserById(id: string) {
+  return prisma.user.findUnique({
+    where: { id },
+  });
+}
+
 export async function getUserByEmail(email: string) {
   return prisma.user.findUnique({
     where: { email },
@@ -39,7 +45,6 @@ export async function verifyUserEmail(token: string) {
   return updatedUser;
 }
 
-
 export async function verifyUserEmailPassReset(token: string) {
   const user = await prisma.user.findFirst({
     where: {
@@ -57,7 +62,6 @@ export async function verifyUserEmailPassReset(token: string) {
   return user;
 }
 
-
 export async function changeUserPassword(token: string, pass: string) {
   // find the user with token
   const user = await verifyUserEmailPassReset(token);
@@ -72,16 +76,13 @@ export async function changeUserPassword(token: string, pass: string) {
     data: {
       password: pass,
       passwordVerifyToken: null,
-      passwordVerifyTokenExpiresAt: null
-    }
+      passwordVerifyTokenExpiresAt: null,
+    },
   });
 
   if (!user) {
     throw new Error("Invalid token or user not found");
   }
-  
+
   return updatedUser;
 }
-
-
-
