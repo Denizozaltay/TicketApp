@@ -1,10 +1,10 @@
 import { NextRequest, NextResponse } from "next/server";
-import { getAuthUser } from "./lib/auth/getAuthUser";
+import { getAuthUserFromRequest } from "./lib/auth/getAuthUser";
 
 export async function middleware(req: NextRequest) {
   const { pathname } = req.nextUrl;
 
-  const user = await getAuthUser();
+  const user = await getAuthUserFromRequest(req);
 
   // Giriş yapmış kullanıcı login/register sayfasına gitmesin
   const authPages = ["/auth/login", "/auth/register"];
@@ -33,31 +33,35 @@ export async function middleware(req: NextRequest) {
     return NextResponse.next();
   }
 
-
-  const ticketPages = ['/my-tickets', '/tickets'];
-
-  // adminler istedigi ticketa gidebilir
-  if(user.role === "admin")
-  {
-    return NextResponse.next();
-  }
-
-// Giris yapmamis kullanicilar tickets ve myticket sayfasina gitmesin
-  if(ticketPages.some((path) => pathname.startsWith(path))) {
-    if(!user) {
-      return NextResponse.redirect(new URL("/", req.url))
-    }
-  }
-
-
   // Admin sayfası için role kontrolü
   if (pathname.startsWith("/admin") && user.role !== "admin") {
     return NextResponse.redirect(new URL("/", req.url));
+  }
+
+  const ticketPages = ["/my-tickets", "/tickets"];
+
+  // adminler istedigi ticketa gidebilir
+  if (user.role === "admin") {
+    return NextResponse.next();
+  }
+
+  // Giris yapmamis kullanicilar tickets ve myticket sayfasina gitmesin
+  if (ticketPages.some((path) => pathname.startsWith(path))) {
+    if (!user) {
+      return NextResponse.redirect(new URL("/", req.url));
+    }
   }
 
   return NextResponse.next();
 }
 
 export const config = {
-  matcher: ["/api/:path*", "/admin", "/auth/login", "/auth/register", "/my-tickets/:path*", "/tickets/:path*"],
+  matcher: [
+    "/api/:path*",
+    "/admin",
+    "/auth/login",
+    "/auth/register",
+    "/my-tickets/:path*",
+    "/tickets/:path*",
+  ],
 };

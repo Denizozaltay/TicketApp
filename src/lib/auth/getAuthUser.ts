@@ -1,5 +1,6 @@
 import { cookies } from "next/headers";
 import { verifyJwtToken } from "./jwt";
+import { NextRequest } from "next/server";
 
 export type AuthUser = {
   id: string;
@@ -14,6 +15,16 @@ export async function getAuthUser(): Promise<AuthUser | null> {
 
   if (!token) return null;
 
-  const user = verifyJwtToken<AuthUser>(token);
+  const user = await verifyJwtToken<AuthUser>(token);
+  return user || null;
+}
+
+export async function getAuthUserFromRequest(
+  req: NextRequest
+): Promise<AuthUser | null> {
+  const token = req.headers.get("Authorization");
+  if (!token) return null;
+
+  const user = await verifyJwtToken<AuthUser>(token);
   return user || null;
 }
