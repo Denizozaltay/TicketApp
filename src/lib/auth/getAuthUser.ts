@@ -22,7 +22,9 @@ export async function getAuthUser(): Promise<AuthUser | null> {
 export async function getAuthUserFromRequest(
   req: NextRequest
 ): Promise<AuthUser | null> {
-  const token = req.headers.get("Authorization");
+  const tokenCookie = req.cookies.get("token");
+  const token = tokenCookie?.value;
+
   if (!token) return null;
 
   const user = await verifyJwtToken<AuthUser>(token);
