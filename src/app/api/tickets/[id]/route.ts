@@ -5,7 +5,7 @@ export async function GET(
   _req: NextRequest,
   { params }: { params: { id: string } }
 ) {
-  const { id } = params;
+  const { id } = await params;
 
   try {
     const ticket = await getTicketById(id);

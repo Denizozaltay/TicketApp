@@ -8,7 +8,6 @@ import Link from "next/link";
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 
-
 export default function LoginForm() {
   const router = useRouter();
 
@@ -17,7 +16,6 @@ export default function LoginForm() {
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
   const [rememberMe, setRememberMe] = useState(false);
-
 
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
@@ -109,17 +107,17 @@ export default function LoginForm() {
         </form>
 
         <div className="flex flex-col gap-2">
-        <div className="flex flex-row justify-between text-sm opacity-70">
-          <p>Don’t have an account?</p>
-          <Link href="/auth/register" className="underline">
-            Sign Up
-          </Link>
-        </div>
-        <div className="flex flex-row justify-between text-sm opacity-70 ">
-        <Link href="/auth/resetpassrequest" className="underline">
-            Forgot Password
-          </Link>
-        </div>
+          <div className="flex flex-row justify-between text-sm opacity-70">
+            <p>Don’t have an account?</p>
+            <Link href="/auth/register" className="underline">
+              Sign Up
+            </Link>
+          </div>
+          <div className="flex flex-row justify-between text-sm opacity-70 ">
+            <Link href="/auth/resetpassrequest" className="underline">
+              Forgot Password
+            </Link>
+          </div>
         </div>
       </div>
     </div>

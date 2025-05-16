@@ -15,9 +15,7 @@ export default async function ChangePassword({ searchParams }: Props) {
 
   return (
     <>
-      <ResetPassword
-      token={token}
-      />
+      <ResetPassword token={token} />
     </>
   );
 }

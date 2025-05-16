@@ -27,16 +27,16 @@ export default function RequestPasswordReset() {
       if (!res.ok) {
         const data = await res.json();
         setError(data.message || "Request Failed");
-        setSuccess("")
+        setSuccess("");
         setIsLoading(false);
         return;
       }
 
-      setSuccess("Password reset instructions has been sent to your email.")
+      setSuccess("Password reset instructions has been sent to your email.");
       setError("");
     } catch (err) {
       setError("Something went wrong. Please try again.");
-      setSuccess("")
+      setSuccess("");
       setIsLoading(false);
       console.error("Request Error:", err);
     } finally {

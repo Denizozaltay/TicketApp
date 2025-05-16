@@ -7,7 +7,6 @@ import TicketModal from "./TicketModal";
 import { ArrowBigLeft, ArrowBigRight, LoaderCircle } from "lucide-react";
 import { useRouter } from "next/navigation";
 
-
 type TicketsTableProps = {
   isArchived: boolean;
 };
@@ -18,7 +17,6 @@ export default function TicketsTable({ isArchived }: TicketsTableProps) {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [page, setPage] = useState(1);
   const limit = 10;
-
 
   const router = useRouter();
 
@@ -41,7 +39,6 @@ export default function TicketsTable({ isArchived }: TicketsTableProps) {
     setSelectedTicket(null);
     setIsModalOpen(false);
   }
-
 
   function navigateChat(id: string) {
     router.push(`/tickets/${id}`);
@@ -202,9 +199,6 @@ export default function TicketsTable({ isArchived }: TicketsTableProps) {
             tickets.map((ticket) => (
               <DataTableComponent key={ticket.id} ticket={ticket} />
             ))}
-          {/* {ticketData.slice(0,50).map((ticket) => (
-            <DataTableComponent key={ticket.id} ticket={ticket} /> 
-          ))} */}
         </table>
         {isLoading ? (
           <div className="flex pt-5">

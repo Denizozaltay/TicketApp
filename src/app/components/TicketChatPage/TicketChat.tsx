@@ -20,17 +20,17 @@ export default function TicketChat({ ticketId, userId, role }: Props) {
   const [input, setInput] = useState("");
   const listRef = useRef<HTMLUListElement>(null);
 
-  // Ticket ve mesaj verilerini client tarafında çek
+  // fetch ticket and messages
   useEffect(() => {
     async function fetchTicketData() {
       try {
         setLoading(true);
-        // Ticket verilerini çek
+        // fetch ticket
         const ticketResponse = await fetch(`/api/tickets/${ticketId}`);
         if (!ticketResponse.ok) throw new Error("Failed to fetch ticket");
         const ticketData = await ticketResponse.json();
 
-        // Mesaj verilerini çek
+        // fetch messages
         const messagesResponse = await fetch(
           `/api/tickets/${ticketId}/messages`
         );
@@ -120,7 +120,7 @@ export default function TicketChat({ ticketId, userId, role }: Props) {
     listRef.current?.scrollTo({ top: listRef.current.scrollHeight });
   }, [messages]);
 
-  // Veri yüklenene kadar yükleniyor göster
+  // loading state
   if (loading || !ticket) {
     return (
       <div className="flex justify-center items-center min-h-screen">
@@ -148,7 +148,7 @@ export default function TicketChat({ ticketId, userId, role }: Props) {
       </h1>
 
       <div className="flex w-[90vw] max-w-7xl h-[70vh] bg-white rounded-[22px] shadow-lg ring-1 ring-gray-200 overflow-hidden">
-        {/* -------- SOL PANEL -------- */}
+        {/* LEFT PANEL */}
         <aside className="w-1/4 min-w-[15rem] border-r border-gray-100 p-8 flex flex-col gap-6 bg-sky-50/30 overflow-y-auto">
           <h2 className="text-xl font-semibold text-gray-800">
             Ticket Details
@@ -216,9 +216,9 @@ export default function TicketChat({ ticketId, userId, role }: Props) {
           )}
         </aside>
 
-        {/* -------- SAĞ: CHAT -------- */}
+        {/* RIGHT: CHAT */}
         <section className="flex-1 flex flex-col">
-          {/* Mesaj listesi */}
+          {/* Message list */}
           <ul
             ref={listRef}
             className="flex-1 overflow-y-auto h-full px-6 py-6 space-y-4 bg-gray-50"
@@ -261,7 +261,7 @@ export default function TicketChat({ ticketId, userId, role }: Props) {
             ))}
           </ul>
 
-          {/* Mesaj yazma alanı */}
+          {/* Message input */}
           <form
             onSubmit={(e) => {
               e.preventDefault();
@@ -303,7 +303,7 @@ export default function TicketChat({ ticketId, userId, role }: Props) {
   );
 }
 
-/* --- Küçük detay satırı --- */
+/* --- Ticket detail row --- */
 function TicketDetail({
   label,
   value,

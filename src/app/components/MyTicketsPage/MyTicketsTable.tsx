@@ -11,7 +11,6 @@ export default function MyTicketsTable() {
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
-
   useEffect(() => {
     fetchUserTickets();
   }, []);
@@ -47,7 +46,7 @@ export default function MyTicketsTable() {
         <Link href={"/"}>
           <div className="flex gap-2">
             <button className="cursor-pointer flex flex-row items-center gap-1 text-s text-red-500 border border-red-500 px-3 py-1 rounded hover:bg-red-500 hover:text-white transition">
-              <ChevronLeft size={14}/>
+              <ChevronLeft size={14} />
               Go Back
             </button>
           </div>
@@ -67,8 +66,7 @@ export default function MyTicketsTable() {
 
         {isLoading ? (
           <div className="flex justify-center items-center py-12">
-          <LoaderCircle
-          className="animate-spin opacity-65"/>
+            <LoaderCircle className="animate-spin opacity-65" />
             <span className="ml-3 text-gray-600">Loading tickets...</span>
           </div>
         ) : error ? (
@@ -89,10 +87,7 @@ export default function MyTicketsTable() {
         ) : (
           <ul className="divide-y divide-gray-100">
             {tickets.map((ticket) => (
-              <TicketRow
-                key={ticket.id}
-                ticket={ticket}
-              />
+              <TicketRow key={ticket.id} ticket={ticket} />
             ))}
           </ul>
         )}
@@ -101,38 +96,37 @@ export default function MyTicketsTable() {
   );
 }
 
-
 function TicketRow({ ticket }: { ticket: Ticket }) {
   return (
     <li key={ticket.id}>
-    <Link
-      href={`/tickets/${ticket.id}`}
-      className="grid grid-cols-4 gap-4 items-center px-8 py-4 hover:bg-gray-100 transition-colors"
-    >
-      <span className="truncate font-medium text-gray-800">
-        {ticket.id}
-      </span>
-      <span className="text-gray-600 overflow-hidden truncate">{ticket.title}</span>
-      <span className="text-gray-500 overflow-hidden">
-        {new Date(ticket.createdAt).toLocaleDateString("tr-TR")}{" "}
-        {new Date(ticket.createdAt).toLocaleTimeString("tr-TR", {
-          hour: "2-digit",
-          minute: "2-digit",
-        })}
-      </span>
-
-      <span className="mx-auto">
-        <span
-          className={`px-4 py-1 rounded-full text-xs font-medium ring-1 ${
-            ticket.isArchived === false
-              ? "bg-green-50 text-green-700 ring-green-300"
-              : "bg-red-50 text-red-700 ring-red-300"
-          }`}
-        >
-          {ticket.isArchived === false ? "open" : "closed"}
+      <Link
+        href={`/tickets/${ticket.id}`}
+        className="grid grid-cols-4 gap-4 items-center px-8 py-4 hover:bg-gray-100 transition-colors"
+      >
+        <span className="truncate font-medium text-gray-800">{ticket.id}</span>
+        <span className="text-gray-600 overflow-hidden truncate">
+          {ticket.title}
         </span>
-      </span>
-    </Link>
-  </li>
-  )
+        <span className="text-gray-500 overflow-hidden">
+          {new Date(ticket.createdAt).toLocaleDateString("tr-TR")}{" "}
+          {new Date(ticket.createdAt).toLocaleTimeString("tr-TR", {
+            hour: "2-digit",
+            minute: "2-digit",
+          })}
+        </span>
+
+        <span className="mx-auto">
+          <span
+            className={`px-4 py-1 rounded-full text-xs font-medium ring-1 ${
+              ticket.isArchived === false
+                ? "bg-green-50 text-green-700 ring-green-300"
+                : "bg-red-50 text-red-700 ring-red-300"
+            }`}
+          >
+            {ticket.isArchived === false ? "open" : "closed"}
+          </span>
+        </span>
+      </Link>
+    </li>
+  );
 }

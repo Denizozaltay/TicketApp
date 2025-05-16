@@ -16,35 +16,33 @@ export default function TicketFormCard({ onSuccess }: Props) {
   const [title, setTitle] = useState("");
   const [content, setContent] = useState("");
 
-
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
 
     // check if title or description is empty
 
-    if (title === null || title === ""){
-      setError(`Title cannot be empty, please give a title.`)
-      setIsLoading(false)
-      return;
-    }
-  
-    if (content === null || content === ""){
-      setError(`Description cannot be empty, please give a brief description.`)
-      setIsLoading(false)
+    if (title === null || title === "") {
+      setError(`Title cannot be empty, please give a title.`);
+      setIsLoading(false);
       return;
     }
 
+    if (content === null || content === "") {
+      setError(`Description cannot be empty, please give a brief description.`);
+      setIsLoading(false);
+      return;
+    }
 
     // must check if user is authorized
 
     if (!userId || !username) {
-      setIsLoading(false)
+      setIsLoading(false);
       alert("You must be logged in to submit a ticket.");
       return;
     }
 
     try {
-      setIsLoading(true)
+      setIsLoading(true);
       const response = await fetch("/api/tickets", {
         method: "POST",
         headers: {
@@ -59,10 +57,9 @@ export default function TicketFormCard({ onSuccess }: Props) {
       });
 
       if (!response.ok) {
-        setIsLoading(false)
+        setIsLoading(false);
         setError("");
         throw new Error("Failed to create ticket");
-        
       }
       setError("");
       setTitle("");
@@ -70,10 +67,10 @@ export default function TicketFormCard({ onSuccess }: Props) {
       onSuccess();
     } catch (error) {
       console.error("Error creating ticket:", error);
-      setIsLoading(false)
+      setIsLoading(false);
       alert("Failed to create ticket. Please try again.");
     } finally {
-      setIsLoading(false)
+      setIsLoading(false);
     }
   }
 
@@ -125,15 +122,20 @@ export default function TicketFormCard({ onSuccess }: Props) {
         {error && <p className="text-red-500 text-sm">{error}</p>}
 
         {/* Send Button */}
-          <div className="flex justify-center pt-4">
-            <Button
-              className="cursor-pointer p-2 font-medium rounded-md border border-[#008CFF] bg-[#008CFF] text-white transition-colors duration-300 hover:bg-white hover:text-black"
-              id="send"
-              type="submit">
-                {isLoading ? <LoaderCircle className="mr-2 h-4 w-4 animate-spin" /> : <Send size={24} />} Send
-              </Button>
-          </div>
-       
+        <div className="flex justify-center pt-4">
+          <Button
+            className="cursor-pointer p-2 font-medium rounded-md border border-[#008CFF] bg-[#008CFF] text-white transition-colors duration-300 hover:bg-white hover:text-black"
+            id="send"
+            type="submit"
+          >
+            {isLoading ? (
+              <LoaderCircle className="mr-2 h-4 w-4 animate-spin" />
+            ) : (
+              <Send size={24} />
+            )}{" "}
+            Send
+          </Button>
+        </div>
       </form>
     </div>
   );

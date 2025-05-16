@@ -63,7 +63,6 @@ export async function verifyUserEmailPassReset(token: string) {
 }
 
 export async function changeUserPassword(token: string, pass: string) {
-  // find the user with token
   const user = await verifyUserEmailPassReset(token);
 
   if (!user) {

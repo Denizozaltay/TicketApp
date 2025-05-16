@@ -39,9 +39,8 @@ export default function RegisterForm() {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ username, email, password }),
-        
       });
-      
+
       if (!res.ok) {
         const data = await res.json();
         setError(data.message || "Registration failed.");
@@ -49,14 +48,13 @@ export default function RegisterForm() {
         return;
       }
       // if successful, send user show this message and
-      setSuccess("Verify your email and you can login! Redirecting...")
-      setError("")
-      
+      setSuccess("Verify your email and you can login! Redirecting...");
+      setError("");
+
       // Redirect to login page after 3 seconds
       setTimeout(() => {
-        router.push("/auth/login"); 
+        router.push("/auth/login");
       }, 3000);
-
     } catch (err) {
       console.error("Register error:", err);
       setError("Something went wrong. Please try again.");

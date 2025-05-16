@@ -9,7 +9,6 @@ export async function POST(req: NextRequest) {
   try {
     const { email }: UserInput = await req.json();
 
-
     if (!email) {
       return NextResponse.json(
         { message: "Please provide email." },
@@ -17,37 +16,30 @@ export async function POST(req: NextRequest) {
       );
     }
 
+    const user = await getUserByEmail(email);
+    if (!user) {
+      return NextResponse.json(
+        { message: "No user found with this email." },
+        { status: 404 }
+      );
+    }
 
-
-    const user = await getUserByEmail(email)
-    if(!user)
-      {
-        return NextResponse.json(
-          { message: "No user found with this email." },
-          { status: 404 }
-        );
-      }
-  
     const passwordVerifyToken = crypto.randomBytes(32).toString("hex");
     const passwordVerifyTokenExpiresAt = new Date(Date.now() + 1000 * 60 * 60);
 
     // go to DB and add the tokens to email associated with user
     await prisma.user.update({
       where: {
-        email: email
+        email: email,
       },
       data: {
         passwordVerifyToken: passwordVerifyToken,
-        passwordVerifyTokenExpiresAt: passwordVerifyTokenExpiresAt
-      }
-    })
+        passwordVerifyTokenExpiresAt: passwordVerifyTokenExpiresAt,
+      },
+    });
 
     // send the email to user with url and token
-    await sendForgotPassEmail(
-      email,
-      passwordVerifyToken
-    );
-
+    await sendForgotPassEmail(email, passwordVerifyToken);
 
     return NextResponse.json(
       {
