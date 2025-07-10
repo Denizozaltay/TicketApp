@@ -45,10 +45,13 @@ export default function TicketChat({ ticketId, userId, role }: Props) {
         setLoading(false);
       }
     }
-
     fetchTicketData();
   }, [ticketId]);
+  
 
+
+
+  
   async function sendMessage() {
     if (!input.trim()) return;
 
@@ -119,6 +122,8 @@ export default function TicketChat({ ticketId, userId, role }: Props) {
   useEffect(() => {
     listRef.current?.scrollTo({ top: listRef.current.scrollHeight });
   }, [messages]);
+
+  
 
   // loading state
   if (loading || !ticket) {

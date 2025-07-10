@@ -4,6 +4,7 @@ import { TicketMessageInput } from "@/src/types/ticketMessage";
 import {
   createTicketMessage,
   getAllMessagesByTicketId,
+  getTicketMessageByTicketId,
 } from "@/src/lib/db/models/ticketMessage";
 import { sendMessageNotificationEmail } from "@/src/lib/mail/sendMessageNotificationEmail";
 import { getTicketById } from "@/src/lib/db/models/ticket";
@@ -45,18 +46,27 @@ export async function POST(
   });
 
   if (user.role !== "user") {
-    const ticket = await getTicketById(id);
-    if (ticket) {
-      const ticketOwner = await getUserById(ticket.userId);
-      if (ticketOwner) {
+    const ticketMessage = await getTicketMessageByTicketId(id);
+    if (ticketMessage) {
+      const ticketOwner = await getUserById(ticketMessage.userId);
+      if (user.id === ticketOwner?.id) {
+        return NextResponse.json(
+          { message: "You cannot send a message to yourself." },
+          { status: 400 }
+        );
+      } else {
         await sendMessageNotificationEmail(
           ticketOwner.username || "User",
           ticketOwner.email,
-          id
+          id,
         );
+        return NextResponse.json(message, { status: 201 });
       }
     }
+    // If no ticketMessage found, just return the created message
+    return NextResponse.json(message, { status: 201 });
   }
 
+  // If user.role === "user", just return the created message
   return NextResponse.json(message, { status: 201 });
 }

@@ -57,6 +57,7 @@ export async function unarchiveTicket(id: string) {
 }
 
 export async function deleteTicket(id: string) {
+  await prisma.ticketMessage.deleteMany({ where: { ticketId: id } });
   return prisma.ticket.delete({
     where: { id },
   });

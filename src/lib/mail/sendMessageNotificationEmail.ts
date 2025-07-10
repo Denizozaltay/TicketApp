@@ -3,7 +3,7 @@ import { transporter } from "./transporter";
 export async function sendMessageNotificationEmail(
   username: string,
   email: string,
-  ticketId: string
+  ticketId: string,
 ) {
   const ticketUrl = `${process.env.BASE_URL}/tickets/${ticketId}`;
 
@@ -15,6 +15,7 @@ export async function sendMessageNotificationEmail(
           <h2>Hello ${username},</h2>
           <p>You have a new message in ticket. Please check it out:</p>
           <a href="${ticketUrl}">Ticket</a>
+          
           <p>If you didn't request this, you can ignore this email.</p>
         `,
   });

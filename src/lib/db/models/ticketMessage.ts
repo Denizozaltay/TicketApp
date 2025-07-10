@@ -8,6 +8,13 @@ export async function getAllMessagesByTicketId(ticketId: string) {
   });
 }
 
+export async function getTicketMessageByTicketId(ticketId: string) {
+  return prisma.ticketMessage.findFirst({
+    where: { ticketId }
+  });
+}
+
+
 export async function createTicketMessage(data: TicketMessageInput) {
   return prisma.ticketMessage.create({
     data,
