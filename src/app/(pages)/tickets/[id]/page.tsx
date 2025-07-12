@@ -27,7 +27,7 @@ export default async function TicketChatPage({ params }: Props) {
 
   const ticket = await getTicketById(id);
 
-  if (ticket && ticket.userId !== user?.id) {
+  if (ticket && ticket.userId !== user?.id && user?.role !== "admin") {
     return (
       <div className="flex flex-col items-center justify-center h-screen gap-5">
         <Image
