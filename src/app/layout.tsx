@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import "./globals.css";
 import { geistMono, geistSans } from "../lib/fonts";
+import IDCard from "./components/UserInfoGeneral/IDCard";
 
 export const metadata: Metadata = {
   title: "Ticket App",
@@ -18,6 +19,7 @@ export default function RootLayout({
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
         {children}
+        <IDCard/>
       </body>
     </html>
   );
