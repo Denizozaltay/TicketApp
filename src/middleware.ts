@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { getAuthUserFromRequest } from "./lib/auth/getAuthUser";
+import next from "next";
 
 const publicAuthRoutes = ["/auth/login", "/auth/register"];
 const publicApiRoutes = ["/api/auth"];
@@ -28,6 +29,7 @@ export async function middleware(req: NextRequest) {
     }
     return NextResponse.next();
   }
+  
 
   // If user is not logged in, redirect to login page
   if (!user) {

@@ -2,19 +2,19 @@ import { NextRequest, NextResponse } from "next/server";
 import { TicketInput } from "@/src/types/ticket";
 import { getAllTickets, createTicket } from "@/src/lib/db/models/ticket";
 
-export async function GET() {
-  try {
-    const tickets = await getAllTickets();
+// export async function GET() {
+//   try {
+//     const tickets = await getAllTickets();
 
-    return NextResponse.json(tickets, { status: 200 });
-  } catch (err) {
-    console.error("GET /api/tickets error:", err);
-    return NextResponse.json(
-      { message: "Failed to fetch tickets." },
-      { status: 500 }
-    );
-  }
-}
+//     return NextResponse.json(tickets, { status: 200 });
+//   } catch (err) {
+//     console.error("GET /api/tickets error:", err);
+//     return NextResponse.json(
+//       { message: "Failed to fetch tickets." },
+//       { status: 500 }
+//     );
+//   }
+// }
 
 export async function POST(req: NextRequest) {
   try {

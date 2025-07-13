@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { getTicketById, deleteTicket } from "@/src/lib/db/models/ticket";
+import { getAuthUserFromRequest } from "@/src/lib/auth/getAuthUser";
 
 export async function GET(
   _req: NextRequest,
@@ -27,9 +28,20 @@ export async function DELETE(
 ) {
   const { id } = await params;
 
-  try {
+    const user = await getAuthUserFromRequest(_req);
+  
+    if(user?.role !== "admin") { // Only admins can delete tickets
+      return NextResponse.json(
+        { error: "Unauthorized" },
+        { status: 403 }
+      );
+    }
+
+  try { 
+    // Check if the ticket exists before deleting
     const ticket = await getTicketById(id);
 
+    //if it does not exist, return 404
     if (!ticket) {
       return NextResponse.json({ error: "Ticket not found." }, { status: 404 });
     }

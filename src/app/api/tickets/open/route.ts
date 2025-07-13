@@ -1,7 +1,18 @@
+import { getAuthUserFromRequest } from "@/src/lib/auth/getAuthUser";
 import { getOpenTickets } from "@/src/lib/db/models/ticket";
 import { NextRequest, NextResponse } from "next/server";
 
 export async function GET(req: NextRequest) {
+
+  const user = await getAuthUserFromRequest(req);
+
+  if(user?.role !== "admin") { // Only admins can access open tickets
+    return NextResponse.json(
+      { error: "Unauthorized" },
+      { status: 403 }
+    );
+  }
+
   try {
     const { searchParams } = new URL(req.url);
     const page = parseInt(searchParams.get("page") || "1");

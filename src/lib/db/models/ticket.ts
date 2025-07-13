@@ -2,9 +2,9 @@ import { prisma } from "@/src/lib/db/prisma";
 import { TicketInput } from "@/src/types/ticket";
 
 export async function getAllTickets() {
-  return prisma.ticket.findMany({
-    orderBy: { createdAt: "desc" },
-  });
+  // return prisma.ticket.findMany({
+  //   orderBy: { createdAt: "desc" },
+  // });
 }
 
 export async function getUserTickets(userId: string) {
