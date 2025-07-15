@@ -48,10 +48,12 @@ body {
 
 .rounded-table thead :nth-child(4) {
     flex: 1;
+    padding-right: 2rem;
 }
 
 .rounded-table thead :nth-child(5) {
     flex: 1;
+    padding-right: 2rem;
 }
 
 .data-column th,
@@ -100,6 +102,7 @@ tbody tr {
     display: flex;
     justify-content: center;
     gap: 5px;
+    overflow: visible;
 }
 
 .delete-btn,
@@ -109,7 +112,7 @@ tbody tr {
     border: none;
     border-radius: 4px;
     cursor: pointer;
-    font-size: 14px;
+    font-size: 0.875rem;
     transition: background-color 0.3s ease;
 }
 
@@ -161,7 +164,7 @@ td:first-child {
 
 td {
     white-space: nowrap;
-    overflow: hidden;
+    overflow-y: hidden;
     text-overflow: ellipsis;
 }
 

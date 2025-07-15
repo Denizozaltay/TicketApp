@@ -1,5 +1,8 @@
 import { NextRequest, NextResponse } from "next/server";
-import { getAuthUser } from "@/src/lib/auth/getAuthUser";
+import {
+  getAuthUser,
+  getAuthUserFromRequest,
+} from "@/src/lib/auth/getAuthUser";
 import { TicketMessageInput } from "@/src/types/ticketMessage";
 import {
   createTicketMessage,
@@ -31,11 +34,26 @@ export async function POST(
   { params }: { params: { id: string } }
 ) {
   const { id } = await params;
-  const user = await getAuthUser();
-
-  if (!user) {
+  const user = await getAuthUserFromRequest(req);
+  const ticket = await getTicketById(id);
+  const ticketOwner = ticket?.userId ? await getUserById(ticket.userId) : null;
+  
+    if (!ticketOwner) {
+    return NextResponse.json(
+      { error: "Ticket owner not found." },
+      { status: 404 }
+    );
+  }
+  if(!user) {
     return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
   }
+
+
+  if (user.id !== ticketOwner.id && user.role !== "admin") {
+  return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+}
+
+
 
   const body: TicketMessageInput = await req.json();
 
@@ -45,28 +63,47 @@ export async function POST(
     userId: user.id,
   });
 
-  if (user.role !== "user") {
-    const ticketMessage = await getTicketMessageByTicketId(id);
-    if (ticketMessage) {
-      const ticketOwner = await getUserById(ticketMessage.userId);
-      if (user.id === ticketOwner?.id) {
-        return NextResponse.json(
-          { message: "You cannot send a message to yourself." },
-          { status: 400 }
-        );
-      } else {
-        await sendMessageNotificationEmail(
-          ticketOwner.username || "User",
-          ticketOwner.email,
+  if(!message) {
+    return NextResponse.json(
+      { error: "Failed to create message" },
+      { status: 500 }
+    ); }
+
+  if (user.id === ticketOwner.id || user.role === "admin") {
+
+     sendMessageNotificationEmail(
+          ticketOwner?.username || "User",
+          ticketOwner?.email || "",
           id,
         );
-        return NextResponse.json(message, { status: 201 });
-      }
-    }
-    // If no ticketMessage found, just return the created message
     return NextResponse.json(message, { status: 201 });
+    } else {
+      return NextResponse.json(
+        { error: "Failed to create message" },
+        { status: 500 }
+      );
+
   }
 
-  // If user.role === "user", just return the created message
-  return NextResponse.json(message, { status: 201 });
-}
+  // if (user.role === "user") {
+  //   const ticketMessage = await getTicketMessageByTicketId(id);
+  //   if (ticketMessage) {
+  //     const ticketOwner = await getUserById(ticketMessage.userId);
+  //     if (user.id === ticketOwner?.id || user?.role !== "admin") {
+  //       return NextResponse.json(
+  //         { message: "You cannot send a message to yourself." },
+  //         { status: 400 }
+  //       );
+  //     } else {
+  //       await sendMessageNotificationEmail(
+  //         ticketOwner?.username || "User",
+  //         ticketOwner?.email || "",
+  //         id,
+  //       );
+  //       return NextResponse.json(message, { status: 201 });
+  //     }
+  //   }
+  //   // If no ticketMessage found, just return the created message
+  //   return NextResponse.json(message, { status: 201 });
+  // }
+  }

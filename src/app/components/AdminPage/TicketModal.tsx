@@ -37,8 +37,8 @@ export default function TicketModal({
       <div className="popup flex flex-col w-[840px] h-[592px] bg-white rounded-[24px] shadow-lg">
         {/* Header */}
         <div className="flex-[1.5] flex flex-row m-[15px] box-border w-auto mb-6">
-          <button className="flex cursor-pointer" onClick={onClose}>
-            <X />
+          <button className="flex" onClick={onClose}>
+            <X className="cursor-pointer"/>
           </button>
           <div className="flex flex-1 justify-center items-center">
             <h1 className="text-[3rem] text-center font-medium bg-gradient-to-t from-[#006EFF] via-[#00BCFF] to-[#00D9FF] bg-clip-text text-transparent">
